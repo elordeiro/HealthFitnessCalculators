@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="../script.js"></script>
+</head>
+<body>
+    <table id="main-table">
+    <th colspan="2">
+        Profile
+    </th>
+    <tr>
+        <td>
+            Preferred Unit of Measurement:
+        </td>
+        <td>
+            <input type="radio" name="unit" id="imperial" checked>
+            <label for="imperial">Imperial</label>
+            <input type="radio" name="unit" id="metric">
+            <label for="metric">Metric</label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Gender:
+        </td>
+        <td>
+            <input type="radio" name="gender" id="male" checked>
+            <label for="male">Male</label>
+            <input type="radio" name="gender" id="female">
+            <label for="female">Female</label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Weight:
+        </td>
+        <td style="width: 50%;">
+            <input type="number" name="weight" id="weight">
+            <label id="weight-label" for="weight">lbs</label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Height:
+        </td>
+        <td style="width: 50%;">
+            <input type="number" name="height" id="height">
+            <label id="height-label" for="height">in</label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Age:
+        </td>
+        <td>
+            <input type="number" name="age" id="age">
+            <label id="age-label" for="age">years</label>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="text-align: center;">
+            <button id="save">Save</button>
+            <button id="erase">Erase Data</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+            Help: <br>
+            The values you enter here will be used to prefill the calculators. <br>
+            Some values are required for certain calculators. <br>
+            Some calculators will require you to enter additional values. <br>
+        </td>
+    </tr>
+    </table>
+    <script>
+        const save = document.getElementById("save");
+        save.addEventListener('click', function () {
+            localStorage.setItem("unit", document.querySelector('input[name="unit"]:checked').id);
+            localStorage.setItem("gender", document.querySelector('input[name="gender"]:checked').id);
+            localStorage.setItem("height", document.getElementById("height").value);
+            localStorage.setItem("weight", document.getElementById("weight").value);
+            localStorage.setItem("age", document.getElementById("age").value);
+        });
+        const erase = document.getElementById("erase");
+        erase.addEventListener('click', function () {
+            localStorage.clear();
+            window.location.reload();
+        });
+    </script>
+</body>
+</html>
