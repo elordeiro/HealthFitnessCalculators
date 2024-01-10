@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style.css">
+    <script src="../script.js"></script>
+    <title>1 RM</title>
+</head>
+<body>
+    <table id="main-table">
+        <colgroup>
+            <col style="width: 50%;">
+            <col style="width: 50%;">
+        </colgroup>
+        <th colspan="2">
+            1 RM Calculator
+        </th>
+        <tr>
+            <td>
+                Unit of Measurement
+            </td>
+            <td>
+                <input type="radio" name="unit" id="imperial" checked>
+                <label for="imperial">Imperial</label>
+                <input type="radio" name="unit" id="metric" checked>
+                <label for="metric">Metric</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Weight:
+            </td>
+            <td>
+                <input type="number" name="weight" id="weight">
+                <label for="weight" id="weight-label">lbs</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Repetitions:
+            </td>
+            <td>
+                <input type="number" name="reps" id="reps">
+                <label for="reps">Reps</label>
+            </td>
+        </tr>
+        <tr style="text-align: center;">
+            <td colspan="2">
+                <button id="calculate">Calculate</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <table id="result-table">
+                    <colgroup>
+                        <col style="width: 33%;">
+                        <col style="width: 33%;">
+                        <col style="width: 33%;">
+                    </colgroup>
+                    <th style="text-align: center;">
+                        % of 1RM
+                    </th>
+                    <th style="text-align: center;">
+                        Weight
+                    </th>
+                    <th style="text-align: center;">
+                        Reps
+                    </th>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                What is 1 RM? <br>
+                <p>
+                    1 RM is the maximum amount of weight that can be lifted for one repetition. <br>
+                    Keep in mind that the estimates tend to be less accurate for higher reps, <br>
+                    in particular for reps above 8. <br>
+                    <a href="https://www.nfpt.com/blog/calculating-a-clients-1rm">[Source]</a>
+                </p>
+            </td>
+        </tr>
+    </table>
+    <script>
+        const percetages = [1, .95, .93, .90, .87, .85, .83, .80, .77, .75, .73, .70];
+        let weightArr = []
+        let weightArrLbs = []
+        let weightArrKg = []
+        let labelArr = []
+        const results = document.getElementById('result-table');
+        for (let i = 0; i < 12; i++) {
+            const newRow = results.insertRow(-1);
+            newRow.style.textAlign = 'center';
+            const cell1 = newRow.insertCell(0);
+            const cell2 = newRow.insertCell(1);
+            const cell3 = newRow.insertCell(2);
+            
+            const input1 = Object.assign(document.createElement('input'), {
+                type: 'number',
+                value: percetages[i] * 100,
+                name: 'percent' + i,
+                id: 'percent' + i,
+                disabled: true,
+                style: 'width: 50px; text-align: center;'
+            });
+            const label1 = Object.assign(document.createElement('label'), {
+                htmlFor: 'percent' + i,
+                innerText: ' %'
+            });
+            cell1.appendChild(input1);
+            cell1.appendChild(label1);
+
+            const input2 = Object.assign(document.createElement('input'), {
+                type: 'number',
+                name: 'weight' + i,
+                id: 'weight' + i,
+                disabled: true,
+                style: 'width: 50px; text-align: center;'
+            });
+            const label2 = Object.assign(document.createElement('label'), {
+                htmlFor: 'weight' + i,
+                innerText: ' lbs',
+            });
+            weightArr.push(input2);
+            labelArr.push(label2);
+            cell2.appendChild(input2);
+            cell2.appendChild(label2);
+
+            const input3 = Object.assign(document.createElement('input'), {
+                type: 'number',
+                disabled: true,
+                style: 'width: 50px; text-align: center;',
+                value: i + 1,
+            });
+            cell3.appendChild(input3);
+        }
+        colorTableGradient('result-table', '#F7FFF7', '#bde2fc', '#157d5a');
+        document.getElementById('calculate').addEventListener('click', function () {
+            const weight = document.getElementById('weight').value;
+            const reps = document.getElementById('reps').value;
+            const oneRM = weight / (1.0278 - (0.0278 * reps));
+
+            for (let i = 0; i < 12; i++) {
+                const result = oneRM * percetages[i];
+                weightArrLbs.push(result);
+                weightArrKg.push(result / 2.205);
+                const obj = weightArr[i];
+                if (isImperial) {
+                    obj.value = (result).toFixed();
+                } else {
+                    obj.value = (result * 2.205).toFixed();
+                }
+            }
+        });
+        
+        document.getElementById('imperial').addEventListener('click', function () {
+            if (isImperial) {
+                return;
+            }
+            if (weightArr[0].value > 0) {
+                for (let i = 0; i < 12; i++) {
+                    weightArr[i].value = weightArrLbs[i].toFixed();
+                }
+            }
+            for (let i = 0; i < 12; i++) {
+                labelArr[i].innerText = ' lbs';
+            }
+        });
+
+        document.getElementById('metric').addEventListener('click', function () {
+            if (!isImperial) {
+                return;
+            }
+            if (weightArr[0].value > 0) {
+                for (let i = 0; i < 12; i++) {
+                    weightArr[i].value = weightArrKg[i].toFixed();
+                }
+            }
+            for (let i = 0; i < 12; i++) {
+                labelArr[i].innerText = ' kg';
+            }
+        });
+    </script>
+</body>
+</html>
