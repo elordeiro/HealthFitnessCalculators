@@ -1,0 +1,171 @@
+---
+---
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.6, maximum-scale=1">
+    <title>BMI</title>
+    <!-- <link rel="stylesheet" href="../style.css"> -->
+    <script src="../script.js"></script>
+</head>
+<table id="main-table" style="margin-left: 10px; margin-right: 10px;">
+    <th colspan="2">
+        BMI Calculator
+    </th>
+    <tr>
+        <td>
+            Unit of Measurement:
+        </td>
+        <td>
+            <input type="radio" name="unit" id="imperial" checked>
+            <label for="imperial">Imperial</label>
+            <input type="radio" name="unit" id="metric">
+            <label for="metric">Metric</label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Weight:
+        </td>
+        <td style="width: 50%;">
+            <input type="number" name="weight" id="weight">
+            <label id="weight-label" for="weight">lbs</label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Height:
+        </td>
+        <td style="width: 50%;">
+            <input type="number" name="height" id="height">
+            <label id="height-label" for="height">in</label>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="text-align: center;">
+            <button id="calculate">Calculate</button>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            BMI:
+        </td>
+        <td>
+            <input type="number" name="bmi" id="bmi" disabled>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="text-align: center;">
+            <div class="bmi-grid" id="bmi-grid"></div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="text-align: center;">
+            BMI Classification
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="text-align: center;">
+            <table id="sub-table">
+                <tr>
+                    <td>Underweight</td>
+                    <td>16.0 - 16.9</td>
+                </tr>
+                <tr>
+                    <td>Mild Thinness</td>
+                    <td>17.0 - 18.4</td>
+                </tr>
+                <tr>
+                    <td>Moderate Thinness</td>
+                    <td>18.5 - 24.9</td>
+                </tr>
+                <tr>
+                    <td>Normal Range</td>
+                    <td>25.0 - 29.9</td>
+                </tr>
+                <tr>
+                    <td>Overweight</td>
+                    <td>30.0 - 34.9</td>
+                </tr>
+                <tr>
+                    <td>Obese Class I</td>
+                    <td>35.0 - 39.9</td>
+                </tr>
+                <tr>
+                    <td>Obese Class II</td>
+                    <td>40.0 - 44.9</td>
+                </tr>
+                <tr>
+                    <td>Obese Class III</td>
+                    <td>45.0 - 49.9</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="text-align: left;">
+            What is BMI?
+            <br>
+            Body Mass Index (BMI) is a person's weight in kilograms divided by the square of height in meters. A high BMI can be an indicator of high body fatness. BMI can be used to screen for weight categories that may lead to health problems but it is not diagnostic of the body fatness or health of an individual.
+            <br>
+            <a href="https://www.nhlbi.nih.gov/health/educational/lose_wt/BMI/bmicalc.htm">[Source]</a>
+        </td>
+    </tr>
+</table>
+
+<script>
+    colorTableGradient('sub-table', '#F7FFF7', '#4a5dd9', '#e24242');
+    document.getElementById('calculate').addEventListener('click', function() {
+        var weight = document.getElementById('weight').value;
+        var height = document.getElementById('height').value;
+        var bmi = 0;
+        if (document.getElementById('imperial').checked) {
+            bmi = (weight / (height * height)) * 703;
+        } else {
+            bmi = weight / ((height/100) * (height/100));
+        }
+        document.getElementById('bmi').value = bmi.toFixed(2);
+        resetGrid();
+        setClass();
+    });
+
+    const colors = ['#cab999', '#cdb38d', '#d1ae80', '#d49974', '#d78368', '#db6d5b', '#df574f', '#e24242'];
+    const grid = document.getElementById('bmi-grid');
+
+    function resetGrid() {
+        for (let i = 0; i < 8; i++) {
+            grid.children[i].style.border = '1px solid #ccc';
+        }
+    }
+    for (let i = 0; i < 8; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'bmi-grid-cell';
+        cell.style.backgroundColor = colors[i];
+        grid.appendChild(cell);
+    }
+    function setClass() {
+        let bmi = parseInt(document.getElementById('bmi').value);
+        if (bmi > 0) {
+            if (bmi < 16.9) {
+                grid.children[0].style.border = '2px solid #000000';
+            } else if (bmi < 18.4) {
+                grid.children[1].style.border = '2px solid #000000';
+            } else if (bmi < 24.9) {
+                grid.children[2].style.border = '2px solid #000000';
+            } else if (bmi < 29.9) {
+                grid.children[3].style.border = '2px solid #000000';
+            } else if (bmi < 34.9) {
+                grid.children[4].style.border = '2px solid #000000';
+            } else if (bmi < 39.9) {
+                grid.children[5].style.border = '2px solid #000000';
+            } else if (bmi < 44.9) {
+                grid.children[6].style.border = '2px solid #000000';
+            } else {
+                grid.children[7].style.border = '2px solid #000000';
+            }
+        }
+    }
+    addHomeButton('main-table');
+</script>

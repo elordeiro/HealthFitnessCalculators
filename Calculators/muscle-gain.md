@@ -1,0 +1,276 @@
+---
+---
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.74">
+    <title>Muscle Gain Potential Calculator</title>
+    <!-- <link rel="stylesheet" href="../style.css"> -->
+    <script src="../script.js"></script>
+</head>
+
+<body>
+<table id="main-table">
+    <colgroup>
+        <col style="width: 50%;">
+        <col style="width: 50%;">
+    </colgroup>
+    <th colspan="2">
+        Muscle Gain Potential Calculator
+    </th>
+    <tr>
+        <td>
+            Unit of Measurement:
+        </td>
+        <td>
+            <input type="radio" name="unit" id="imperial" checked>
+            <label for="imperial">Imperial</label>
+            <input type="radio" name="unit" id="metric">
+            <label for="metric">Metric</label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Weight:
+        </td>
+        <td style="width: 50%;">
+            <input type="number" name="weight" id="weight">
+            <label id="weight-label" for="weight">lbs</label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Height:
+        </td>
+        <td style="width: 50%;">
+            <input type="number" name="height" id="height">
+            <label id="height-label" for="height">in</label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Body Fat Percentage:
+        </td>
+        <td>
+            <input type="number" name="body-fat" id="body-fat" value="10">
+            <label id="body-fat-label" for="body-fat">%</label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Wrist Circumference:
+        </td>
+        <td>
+            <input type="number" name="wrist" id="wrist">
+            <label for="wrist" id="wrist-label">in</label> 
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Ankle Circumference
+        </td>
+        <td>
+            <input type="number" name="ankle" id="ankle">
+            <label for="ankle" id="ankle-label">in</label>
+        </td>
+    </tr>
+    <tr style="text-align: center;">
+        <td colspan="2">
+            <button id="calculate">Calculate</button>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <table id="sub-table" class="mgp-table" style="min-width: 500px;">
+                <colgroup>
+                    <col style="width: 33%;">
+                    <col style="width: 33%;">
+                    <col style="width: 33%;">
+                </colgroup>
+                <th>
+                    Results
+                </th>
+                <th>
+                    Realistic Goals
+                </th><th>
+                    Maximum Potential
+                </th>
+            </table>
+        </td>
+    </tr>
+</table>
+<script>
+    const resultArr = ['Total Body Weight', 'Lean Body Mass', 'Fat Mass', 'Chest', 'Biceps', 'Forearms', 'Neck', 'Thighs', 'Calves']
+    
+    const subTable = document.getElementById('sub-table');
+    for (let i = 0; i < 9; i++) {
+        const newRow = subTable.insertRow(-1);
+        const col1 = newRow.insertCell(0);
+        const col2 = newRow.insertCell(1);
+        const col3 = newRow.insertCell(2);
+        
+        col1.innerText = resultArr[i];
+
+        let labelText = '';
+        if (i < 3) {
+            if (localStorage.getItem('unit') === 'imperial') {
+                labelText = ' lbs';
+            } else {
+                labelText = ' kg';
+            }
+        } else {
+            if (localStorage.getItem('unit') === 'imperial') {
+                labelText = ' in';
+            } else {
+                labelText = ' cm';
+            }
+        }
+
+        const goalInput = Object.assign(document.createElement('input'), {
+            type: 'number',
+            name: 'goalInput' + i,
+            id: 'goalInput' + i,
+            disabled: true
+        });
+        const goalLabel = Object.assign(document.createElement('label'), {
+            htmlFor: 'goalInput' + i,
+            innerText: labelText,
+            id: 'goalLabel' + i
+        });
+        col2.appendChild(goalInput)
+        col2.appendChild(goalLabel)
+
+        const maxInput = Object.assign(document.createElement('input'), {
+            type: 'number',
+            name: 'maxInput' + i,
+            id: 'maxInput' + i,
+            disabled: true
+        });
+        const maxLabel = Object.assign(document.createElement('label'), {
+            htmlFor: 'maxInput' + i,
+            innerText: labelText,
+            id: 'maxLabel' + i
+        });
+        col3.appendChild(maxInput);
+        col3.appendChild(maxLabel);
+    }
+    colorTableGradient('sub-table', '#F7FFF7', '#bde2fc', '#157d5a');
+    
+    let needsRecalc = false;
+    
+    document.getElementById('imperial').addEventListener('click', function () {
+        if (isImperial) {
+            return;
+        }
+
+        for (let i = 0; i < 9; i++) {
+            let labelText = '';
+            if (i < 3) {
+                labelText = ' lbs';
+            } else {
+                labelText = ' in';
+            }
+        }
+
+        const wristLabel = document.getElementById('wrist-label');
+        wristLabel.innerText = ' in';
+        const ankleLabel = document.getElementById('ankle-label');
+        ankleLabel.innerText = ' in';
+
+        if (document.getElementById('wrist').value > 0) {
+            document.getElementById('wrist').value = (document.getElementById('wrist').value / 2.54).toFixed();
+        }
+        if (document.getElementById('ankle').value > 0) {
+            document.getElementById('ankle').value = (document.getElementById('ankle').value / 2.54).toFixed();
+        }
+
+        if (document.getElementById('maxInput0').value) {
+            needsRecalc = true;
+        }
+    })
+
+    document.getElementById('metric').addEventListener('click', function () {
+        if (!isImperial) {
+            return;
+        }
+
+        for (let i = 0; i < 9; i++) {
+            let labelText = '';
+            if (i < 3) {
+                labelText = ' kg';
+            } else {
+                labelText = ' cm';
+            }
+            
+            const goalLabel = document.getElementById('goalLabel' + i);
+            goalLabel.innerText = labelText;
+            const maxLabel = document.getElementById('maxLabel' + i);
+            maxLabel.innerText = labelText;
+        }
+        const wristLabel = document.getElementById('wrist-label');
+        wristLabel.innerText = ' cm';
+        const ankleLabel = document.getElementById('ankle-label');
+        ankleLabel.innerText = ' cm';
+
+        if (document.getElementById('wrist').value > 0) {
+            document.getElementById('wrist').value = (document.getElementById('wrist').value * 2.54).toFixed();
+        }
+        if (document.getElementById('ankle').value > 0) {
+            document.getElementById('ankle').value = (document.getElementById('ankle').value * 2.54).toFixed();
+        }
+
+        if (document.getElementById('maxInput0').value) {
+            needsRecalc = true;
+        }
+    });
+
+    document.getElementById('calculate').addEventListener('click', function () {
+        let height = parseFloat(document.getElementById('height').value);
+        let ankle  = parseFloat(document.getElementById('ankle').value);
+        let wrist  = parseFloat(document.getElementById('wrist').value);
+        let bf     = parseFloat(document.getElementById('body-fat').value);
+
+        if (!isImperial) {
+            height /= 2.54;
+            ankle  /= 2.54;
+            wrist  /= 2.54;
+        }
+
+        document.getElementById('maxInput1').value = (((height ** 1.5) * (Math.sqrt(wrist) / 22.6670 + Math.sqrt(ankle) / 17.0104) * (bf / 224 + 1))).toFixed(2);
+        document.getElementById('maxInput0').value = (parseFloat(document.getElementById('maxInput1').value) / 0.90).toFixed(2);
+        document.getElementById('maxInput2').value = (parseFloat(document.getElementById('maxInput0').value) * (bf / 100)).toFixed(2);
+        document.getElementById('maxInput3').value = ((1.6817 * wrist) + (1.3759 * ankle) + (0.3314 * height)).toFixed(2);
+        document.getElementById('maxInput4').value = ((1.2003 * wrist) + (0.1236 * height)).toFixed(2);
+        document.getElementById('maxInput5').value = ((0.9626 * wrist) + (0.0989 * height)).toFixed(2);
+        document.getElementById('maxInput6').value = ((1.1424 * wrist) + (0.1236 * height)).toFixed(2);
+        document.getElementById('maxInput7').value = ((1.3868 * ankle) + (0.1805 * height)).toFixed(2);
+        document.getElementById('maxInput8').value = ((0.9298 * ankle) + (0.121 * height)).toFixed(2);
+
+        for (let i = 0; i < 9; i++) {
+            const el = document.getElementById('goalInput' + i);
+            el.value = parseFloat(document.getElementById('maxInput' + i).value * 0.95).toFixed(2);
+        }
+
+        if (!isImperial) {
+            convertToMetric();
+        }
+    });
+    
+    function convertToMetric() {
+        for (let i = 0; i < 9; i++) {
+            const el = document.getElementById('maxInput' + i);
+            const value = el.value;
+            if (i < 3) {
+                el.value = (parseFloat(value) / 2.205).toFixed(2);
+            } else {
+                el.value = (parseFloat(value) * 2.54).toFixed(2);
+            }
+        }
+        for (let i = 0; i < 9; i++) {
+            const el = document.getElementById('goalInput' + i);
+            el.value = parseFloat(document.getElementById('maxInput' + i).value * 0.95).toFixed(2);
+        }
+    }
+    addHomeButton('main-table');
+</script>

@@ -1,17 +1,19 @@
 let isImperial = true;
 
+function addHomeButton(tableId) {
+    const mainTable = document.getElementById(tableId);
+    const newRow = mainTable.insertRow(-1);
+    const newCell = Object.assign(newRow.insertCell(0), {
+        colSpan: 2,
+    });
+    newCell.innerHTML = '<button id="home" style="width: 100px;">&LeftAngleBracket;<a href="../index.html"> Home</a></button>';
+}
+
 function colorTableGradient(tableId, backgroundColor, baseColor, peakColor) {
     const mainTable = document.getElementById(tableId);
-    if (tableId === 'main-table' && document.title !== 'Health and Fitness Calculators') {
-        const newRow = mainTable.insertRow(-1);
-        const newCell = Object.assign(newRow.insertCell(0), {
-            colSpan: 2,
-        });
-        newCell.innerHTML = '<button id="home" style="width: 100px;">&LeftAngleBracket;<a href="../index.html"> Home</a></button>';
-    }
-    
     mainTable.style.backgroundColor = backgroundColor;
     const n = mainTable.rows.length;
+
     const baseRed   = parseInt(baseColor.slice(1,3), 16);
     const baseGreen = parseInt(baseColor.slice(3,5), 16);
     const baseBlue  = parseInt(baseColor.slice(5,7), 16);

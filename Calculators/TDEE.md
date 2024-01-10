@@ -1,0 +1,217 @@
+---
+---
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.6">
+    <title>TDEE</title>
+    <!-- <link rel="stylesheet" href="../style.css"> -->
+    <script src="../script.js"></script>
+</head>
+
+<table id="main-table">
+<colgroup>
+    <col style="width: 50%;">
+    <col style="width: 50%;">
+</colgroup>
+<th colspan="2">
+    TDEE Calculator
+</th>
+<tr>
+    <td>
+        Unit of Measurement:
+    </td>
+    <td>
+        <input type="radio" name="unit" id="imperial" checked>
+        <label for="imperial">Imperial</label>
+        <input type="radio" name="unit" id="metric">
+        <label for="metric">Metric</label>
+    </td>
+</tr>
+<tr>
+    <td>
+        Gender:
+    </td>
+    <td>
+        <input type="radio" name="gender" id="male" checked>
+        <label for="male">Male</label>
+        <input type="radio" name="gender" id="female">
+        <label for="female">Female</label>
+    </td>
+</tr>
+<tr>
+    <td>
+        Weight:
+    </td>
+    <td style="width: 50%;">
+        <input type="number" name="weight" id="weight">
+        <label id="weight-label" for="weight">lbs</label>
+    </td>
+</tr>
+<tr>
+    <td>
+        Height:
+    </td>
+    <td style="width: 50%;">
+        <input type="number" name="height" id="height">
+        <label id="height-label" for="height">in</label>
+    </td>
+</tr>
+<tr>
+    <td>
+        Age:
+    </td>
+    <td>
+        <input type="number" name="age" id="age">
+        <label id="age-label" for="age">years</label>
+    </td>
+</tr>
+<tr>
+    <td>
+        Activity Level:
+    </td>
+    <td>
+        <select name="activity-level" id="activity-level">
+            <option value="1.15">Sedentary (Little to no exercise)</option>
+            <option value="1.3">Lightly Active (1 - 3 Hours of exercise per week)</option>
+            <option value="1.5">Moderately Active (4 - 6 Hours of exercise per week)</option>
+            <option value="1.7">Very Active (7 - 9 Hours of exercise per week)</option>
+            <option value="1.9">Extremely Active (10+ Hours of exercise per week)</option>
+        </select>
+    </td>
+</tr>
+<tr>
+    <td colspan="2" style="text-align: center;">
+        <button id="calculate">Calculate</button>
+    </td>
+</tr>
+<tr>
+    <td>
+        TDEE:
+    </td>
+    <td>
+        <input type="number" name="tdee" id="tdee" disabled>
+    </td>
+</tr>
+<tr>
+    <td>
+        <table style="width: 100%;" id="side-table-left">
+            <colgroup>
+                <col style="width: 50%;">
+                <col style="width: 50%;">
+            </colgroup>
+            <th colspan="2">
+                Calories To Lose Weight
+            </th>
+            <tr>
+                <td>
+                    Slow:
+                </td>
+                <td>
+                    <input type="number" name="slow-loss" id="slow-loss" disabled>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Moderate:
+                </td>
+                <td>
+                    <input type="number" name="moderate-loss" id="moderate-loss" disabled>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Fast:
+                </td>
+                <td>
+                    <input type="number" name="fast-loss" id="fast-loss" disabled>
+                </td>
+            </tr>
+        </table>
+    </td>
+    <td>
+        <table style="width: 100%;" id="side-table-right">
+            <colgroup>
+                <col style="width: 50%;">
+                <col style="width: 50%;">
+            </colgroup>
+            <th colspan="2">
+                Calories To Gain Weight
+            </th>
+            <tr>
+                <td>
+                    Slow:
+                </td>
+                <td>
+                    <input type="number" name="slow-gain" id="slow-gain" disabled>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Moderate:
+                </td>
+                <td>
+                    <input type="number" name="moderate-gain" id="moderate-gain" disabled>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Fast:
+                </td>
+                <td>
+                    <input type="number" name="fast-gain" id="fast-gain" disabled>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="2" style="text-align: left;">
+        What is TDEE?
+        <br>
+        TDEE stands for Total Daily Energy Expenditure. It is the total number of calories that your body burns in a day. This includes calories burned from exercise, calories burned from digesting food, and calories burned from your basal metabolic rate <a href="BMR.html">(BMR)</a>.
+        <br>
+        <a href="https://www.healthline.com/health/how-to-calculate-your-basal-metabolic-rate#how-it-works">[Source]</a>
+    </td>
+</tr>
+</table>
+<script>
+    colorTableGradient('side-table-left', '#F7FFF7', '#bde2fc', '#157d5a');
+    colorTableGradient('side-table-right', '#F7FFF7', '#bde2fc', '#157d5a');
+    document.getElementById('calculate').addEventListener('click', function() {
+        let weight = document.getElementById('weight').value;
+        let height = document.getElementById('height').value;
+        let age = document.getElementById('age').value;
+        let bmr = 0;
+        if (document.getElementById('imperial').checked) {
+            if (document.getElementById('male').checked) {
+                bmr = 4.536 * weight + 15.88 * height - 5 * age + 5;
+            } else {
+                bmr = 4.536 * weight + 15.88 * height - 5 * age - 161;
+            }
+        } else {
+            if (document.getElementById('male').checked) {
+                bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+            } else {
+                bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+            }
+        }
+        let tdee = bmr * parseFloat(document.getElementById('activity-level').value);
+        document.getElementById('tdee').value = tdee.toFixed();
+        let slowLoss = tdee - 250;
+        let moderateLoss = tdee - 500;
+        let fastLoss = tdee - 1000;
+        let slowGain = tdee + 250;
+        let moderateGain = tdee + 500;
+        let fastGain = tdee + 1000;
+        document.getElementById('slow-loss').value = slowLoss.toFixed();
+        document.getElementById('moderate-loss').value = moderateLoss.toFixed();
+        document.getElementById('fast-loss').value = fastLoss.toFixed();
+        document.getElementById('slow-gain').value = slowGain.toFixed();
+        document.getElementById('moderate-gain').value = moderateGain.toFixed();
+        document.getElementById('fast-gain').value = fastGain.toFixed();
+    });
+    
+    addHomeButton('main-table');
+</script>
