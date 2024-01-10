@@ -1,11 +1,10 @@
 ---
-layout: page
 ---
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Health and Fitness Calculators</title>
+    <!-- <title>Health and Fitness Calculators</title> -->
     <!-- <link rel="stylesheet" href="style.css"> -->
     <style>
         @media only screen and (min-width: 600px) {
