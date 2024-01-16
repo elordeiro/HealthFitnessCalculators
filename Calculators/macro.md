@@ -116,12 +116,12 @@
                 </tr>
                 <tr style="text-align: center;">
                     <td colspan="2">
-                        <button id="balanced">Balanced</button>
-                        <button id="low-carb">Low-Carb</button>
-                        <button id="high-carb">High-Carb</button>
-                        <button id="high-protein">High-Protein</button>
-                        <button id="keto">Ketogenic</button>
-                        <button id="custom">Custom</button>
+                        <button style="margin: 5px;" id="balanced">Balanced</button>
+                        <button style="margin: 5px;" id="low-carb">Low-Carb</button>
+                        <button style="margin: 5px;" id="high-carb">High-Carb</button>
+                        <button style="margin: 5px;" id="high-protein">High-Protein</button>
+                        <button style="margin: 5px;" id="keto">Ketogenic</button>
+                        <button style="margin: 5px;" id="custom">Custom</button>
                     </td>
                 </tr>
                 <tr>

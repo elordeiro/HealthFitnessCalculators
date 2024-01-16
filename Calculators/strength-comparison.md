@@ -1,0 +1,216 @@
+---
+---
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.55">
+    <title>Strength Comparision Calculator</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="../script.js"></script>
+</head>
+<table id="main-table">
+    <colgroup>
+        <col style="width: 50%;">
+        <col style="width: 50%;">
+    </colgroup>
+    <th colspan="2">
+        Strength Comparision Calculator
+    </th>
+    <tr>
+        <td>
+            Unit of Measurement:
+        </td>
+        <td>
+            <input type="radio" name="unit" id="imperial" checked>
+            <label for="imperial">Imperial</label>
+            <input type="radio" name="unit" id="metric">
+            <label for="metric">Metric</label>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <table id="versus-table" style="min-width: 700px;">
+                <colgroup>
+                    <col style="width: 50%;">
+                    <col style="width: 50%;">
+                </colgroup>
+                <th colspan="2">
+                    Versus
+                </th>
+                <tr>
+                    <td>
+                        <table id="person1-table">
+                            <colgroup>
+                                <col style="width: 50%;">
+                                <col style="width: 50%;">
+                            </colgroup>
+                            <tr>
+                                <td colspan="2">
+                                    Person 1
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;" colspan="2">
+                                    Squat + Bench + Deadlift =<br>
+                                    <input type="number" id="person1-total" name="person1-total" style="width: 70px;" value="500" onchange="update(this)">
+                                    <label for="person1-total">lbs</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Body Weight:
+                                </td>
+                                <td>
+                                    <input type="number" id="person1-weight" name="person1-weight" style="width: 70px;" value="150" onchange="update(this)">
+                                    <label for="person1-weight">lbs</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="text-align: center;">
+                                    Score:
+                                    <input type="number" id="person1-score" name="person1-score" style="width: 100px;" disabled>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table id="person2-table">
+                            <tr>
+                                <td colspan="2">
+                                    Person 2
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;" colspan="2">
+                                    Squat + Bench + Deadlift =<br>
+                                    <input type="number" id="person2-total" name="person2-total" style="width: 70px;" value="700" onchange="update(this)">
+                                    <label for="person2-total">lbs</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Body Weight:
+                                </td>
+                                <td>
+                                    <input type="number" id="person2-weight" name="person2-weight" style="width: 70px;" value="180" onchange="update(this)">
+                                    <label for="person1-weight">lbs</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="text-align: center;">
+                                    Score:
+                                    <input type="number" id="person2-score" name="person2-score" style="width: 100px;" disabled>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center;">
+                        <button id="calculate" onclick="calculate()">Compare</button>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<script>
+    const versusTable        = document.getElementById('versus-table');
+    const person1TotalInput  = document.getElementById('person1-total');
+    const person1WeightInput = document.getElementById('person1-weight');
+    const person1ScoreInput  = document.getElementById('person1-score');
+    const person2TotalInput  = document.getElementById('person2-total');
+    const person2WeightInput = document.getElementById('person2-weight');
+    const person2ScoreInput  = document.getElementById('person2-score');
+
+    function calculate() {
+        let person1Total  = parseFloat(person1TotalInput.value);
+        let person1Weight = parseFloat(person1WeightInput.value);
+        let person1Score  = parseFloat(person1ScoreInput.value);
+        let person2Total  = parseFloat(person2TotalInput.value);
+        let person2Weight = parseFloat(person2WeightInput.value);
+        let person2Score  = parseFloat(person2ScoreInput.value);
+
+        let unit = document.querySelector('input[name=unit]:checked').id;
+        let mp = unit === 'imperial'? 1 : 2.2;
+        let score1 = person1Total * mp * Math.pow(person1Weight * mp, -2/3);
+        person1ScoreInput.value = score1.toFixed(2);
+        
+        let score2 = person2Total * mp * Math.pow(person2Weight * mp, -2/3);
+        person2ScoreInput.value = score2.toFixed(2);
+
+        if (document.getElementById('results-row')) {
+            document.getElementById('results-row').remove();
+        }
+        const newRow = versusTable.insertRow(-1);
+        newRow.id    = 'results-row';
+        const cell   = newRow.insertCell();
+        cell.colSpan = 2;
+
+        const stronger = score1 > score2? 'Person 1' : 'Person 2';
+        const weaker   = score1 > score2? 'Person 2' : 'Person 1';
+        const kgOrLbs  = unit === 'imperial'? 'lbs'  : 'kg';
+        let totalDiff   = 0;
+        let weightDiff  = 0;
+        
+        if (stronger === "Person 1") {
+            totalDiff = Math.round((score1 / (Math.pow(person2Weight * mp, -2/3))) - (person2Total * mp));
+            totalDiff = Math.round(totalDiff / (unit === 'imperial'? 1 : 2.2));
+        } else {
+            totalDiff = Math.round((score2 / (Math.pow(person1Weight * mp, -2/3))) - (person1Total * mp));
+            totalDiff = Math.round(totalDiff / (unit === 'imperial'? 1 : 2.2));
+        }
+        if (stronger === "Person 1") {
+            weightDiff = Math.round(person2Weight * mp - Math.pow((score1 / (person2Total * mp)), -3/2));
+            weightDiff = Math.round(weightDiff / (unit === 'imperial'? 1 : 2.2));
+        } else {
+            weightDiff = Math.round(person1Weight * mp - Math.pow((score2 / (person1Total * mp)), -3/2));
+            weightDiff = Math.round(weightDiff / (unit === 'imperial'? 1 : 2.2));
+        }
+
+        cell.innerHTML = `${stronger} is stronger than ${weaker}. <br>` + 
+                        `To beat ${stronger}, ${weaker} needs to: <br>` +
+                        `<ul>` +
+                            `<li> Increase their lifts total by ${totalDiff} ${kgOrLbs} or,` +
+                            `<li> Lose ${weightDiff} ${kgOrLbs} while maitaining their current total.` +
+                        `<ul>`;
+        colorTableGradient('versus-table', '#F7FFF7', '#bde2fc', '#157d5a');
+    }
+
+    document.getElementById('imperial').addEventListener('click', function () {
+        if (isImperial) {
+            return;
+        }
+        let person1Total  = (parseFloat(person1TotalInput.value)  * 2.2).toFixed(2);
+        let person1Weight = (parseFloat(person1WeightInput.value) * 2.2).toFixed(2);
+        let person2Total  = (parseFloat(person2TotalInput.value)  * 2.2).toFixed(2);
+        let person2Weight = (parseFloat(person2WeightInput.value) * 2.2).toFixed(2);
+
+        person1TotalInput.value  = Math.round(person1Total);
+        person1WeightInput.value = Math.round(person1Weight);
+        person2TotalInput.value  = Math.round(person2Total);
+        person2WeightInput.value = Math.round(person2Weight);
+        document.getElementById('calculate').click();
+    });
+
+    document.getElementById('metric').addEventListener('click', function () {
+        if (!isImperial) {
+            return;
+        }
+        let person1Total  = (parseFloat(person1TotalInput.value)  / 2.2).toFixed(3);
+        let person1Weight = (parseFloat(person1WeightInput.value) / 2.2).toFixed(3);
+        let person2Total  = (parseFloat(person2TotalInput.value)  / 2.2).toFixed(3);
+        let person2Weight = (parseFloat(person2WeightInput.value) / 2.2).toFixed(3);
+
+        person1TotalInput.value  = Math.round(person1Total);
+        person1WeightInput.value = Math.round(person1Weight);
+        person2TotalInput.value  = Math.round(person2Total);
+        person2WeightInput.value = Math.round(person2Weight);
+        document.getElementById('calculate').click();
+    });
+
+    colorTableGradient('versus-table', '#F7FFF7', '#bde2fc', '#157d5a');
+    colorTableGradient('person1-table', '#F7FFF7', '#bde2fc', '#157d5a');
+    colorTableGradient('person2-table', '#F7FFF7', '#bde2fc', '#157d5a');
+    addHomeButton('main-table');
+</script>

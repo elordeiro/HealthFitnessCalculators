@@ -72,12 +72,17 @@
         </tr>
         <tr>
             <td>
-                &bigcirc; Strength Potential Calculator (Coming Soon)
+                &bigcirc; <a href="Calculators/strength-potential.html">Strength Potential Calculator</a>
             </td>
         </tr>
         <tr>
             <td>
-                &bigcirc; Strength Comparison Calculator (Coming Soon)
+                &bigcirc; <a href="Calculators/strength-comparison.html">Strength Comparison Calculator</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                &bigcirc; <a href="Calculators/BBLS.html">Advanced Workout Planner</a>
             </td>
         </tr>
         <tr>

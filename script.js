@@ -2,8 +2,9 @@ let isImperial = true;
 
 function addHomeButton(tableId) {
     const mainTable = document.getElementById(tableId);
-    const newRow = mainTable.insertRow(-1);
-    const newCell = Object.assign(newRow.insertCell(0), {
+    const newRow    = mainTable.insertRow(-1);
+    newRow.id       = 'home';
+    const newCell   = Object.assign(newRow.insertCell(0), {
         colSpan: 2,
     });
     newCell.innerHTML = '<button id="home" style="width: 100px;">&LeftAngleBracket;<a href="../index.html"> Home</a></button>';
@@ -54,6 +55,7 @@ window.onload = function() {
                 console.log('height-label not found')
             }
             isImperial = true;
+            
             if (needsRecalc) {
                 document.getElementById('calculate').click();
             }
@@ -84,8 +86,12 @@ window.onload = function() {
             }
             isImperial = false;
             
-            if (needsRecalc) {
-                document.getElementById('calculate').click();
+            try {
+                if (needsRecalc) {
+                    document.getElementById('calculate').click();
+                }
+            } catch {
+                // ignore me;
             }
         });
     }
@@ -144,5 +150,12 @@ window.onload = function() {
     if (document.getElementById('metric').checked) {
         isImperial = false;
     }
+
+    if (document.getElementById('info-container')) {
+        document.getElementById('info-container').addEventListener('click touchstart', function () {
+            document.getElementById('info-container').style.display = 'block';
+        });
+    }
+
     // document.getElementById('calculate').click();
 };

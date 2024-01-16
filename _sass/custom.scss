@@ -1,3 +1,15 @@
+
+
+/**
+* Reset some basic elements
+*/
+body, h1, h2, h3, h4, h5, h6,
+p, blockquote, pre, hr,
+dl, dd, ol, ul, figure {
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font: "OpenSansRegular", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
     font-weight: normal;
@@ -23,6 +35,7 @@ table {
     border: 2px solid #000000;
     font-family: monospace;
     font-weight: bold;
+    border-collapse: collapse;
 }
 
 td {
@@ -31,8 +44,15 @@ td {
     line-height: 1.7;
 }
 
+
 a {
     color: #292F36;
+}
+
+@media (min-width: 800px) {
+    .container {
+        width: 800px;
+    }
 }
 
 .bmi-grid {
