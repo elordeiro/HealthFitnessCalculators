@@ -1,6 +1,4 @@
----
----
-
+<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.55">
@@ -8,6 +6,7 @@
     <link rel="stylesheet" href="../style.css">
     <script src="../script.js"></script>
 </head>
+<body>
 <table id="main-table">
     <colgroup>
         <col style="width: 50%;">
@@ -167,13 +166,12 @@
             weightDiff = Math.round(person1Weight * mp - Math.pow((score2 / (person1Total * mp)), -3/2));
             weightDiff = Math.round(weightDiff / (unit === 'imperial'? 1 : 2.2));
         }
-
         cell.innerHTML = `${stronger} is stronger than ${weaker}. <br>` + 
                         `To beat ${stronger}, ${weaker} needs to: <br>` +
                         `<ul>` +
-                            `<li> Increase their lifts total by ${totalDiff} ${kgOrLbs} or,` +
-                            `<li> Lose ${weightDiff} ${kgOrLbs} while maitaining their current total.` +
-                        `<ul>`;
+                            `<li>Increase their lifts total by ${totalDiff} ${kgOrLbs} or,</li>` +
+                            `<li>Lose ${weightDiff} ${kgOrLbs} while maitaining their current total.</li>` +
+                        `</ul>`;
         colorTableGradient('versus-table', '#F7FFF7', '#bde2fc', '#157d5a');
     }
 
@@ -214,3 +212,5 @@
     colorTableGradient('person2-table', '#F7FFF7', '#bde2fc', '#157d5a');
     addHomeButton('main-table');
 </script>
+</body>
+</html>
