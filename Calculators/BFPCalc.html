@@ -1,285 +1,376 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.5">
-    <title>Body Fat Percentage Calculator</title>
-    <link rel="stylesheet" href="../style.css"> 
-    <script src="../script.js"></script>
-</head>
-<body>
-<table id="main-table">
-    <colgroup>
-        <col style="width: 50%;">
-        <col style="width: 50%;">
-    </colgroup>
-    <th colspan="2">
-        Body Fat Percentage Calculator
-    </th>
-    <tr>
-        <td>
-            Unit of Measurement:
-        </td>
-        <td>
-            <input type="radio" name="unit" id="imperial" checked>
-            <label for="imperial">Imperial</label>
-            <input type="radio" name="unit" id="metric">
-            <label for="metric">Metric</label>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Gender:
-        </td>
-        <td>
-            <input type="radio" name="gender" id="male" checked>
-            <label for="male">Male</label>
-            <input type="radio" name="gender" id="female">
-            <label for="female">Female</label>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Weight:
-        </td>
-        <td style="width: 50%;">
-            <input type="number" name="weight" id="weight">
-            <label id="weight-label" for="weight">lbs</label>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Age:
-        </td>
-        <td>
-            <input type="number" name="age" id="age">
-            <label id="age-label" for="age">years</label>
-        </td>
-    </tr>
-    <tr>
-        <td style="display: flex;">
-            <div id="info-container">
-                <span id="info-icon">&#9432;</span>
-                <div id="info-content">
-                    <p>The chest measurement is taken as a diagonal fold, halfway between the anterior axillary line and nipple</p>
-                </div>
-            </div>
-            &ThinSpace; Chest
-        </td>
-        <td>
-            <input type="number" name="chest" id="chest" value="15">
-            <label id="chest-label" for="chest">mm</label>
-        </td>
-    </tr>
-    <tr>
-        <td style="display: flex;">
-            <div id="info-container">
-                <span id="info-icon">&#9432;</span>
-                <div id="info-content">
-                    <p>The abdominal measurement is taken as a vertical fold, 2cm to the right side of the umbilicus</p>
-                </div>
-            </div>
-            &ThinSpace; Abdominal
-        </td>
-        <td>
-            <input type="number" name="abdominal" id="abdominal" value="25">
-            <label id="abdominal-label" for="abdominal">mm</label>
-        </td>
-    </tr>
-    <tr>
-        <td style="display: flex;">
-            <div id="info-container">
-                <span id="info-icon">&#9432;</span>
-                <div id="info-content">
-                    <p>The thigh measurement is taken as a vertical fold, midway between the proximal border of the patella and the inguinal crease</p>
-                </div>
-            </div>
-            &ThinSpace; Thigh
-        </td>
-        <td>
-            <input type="number" name="thigh" id="thigh" value="15">
-            <label id="thigh-label" for="thigh">mm</label>
-        </td>
-    </tr>
-    <tr>
-        <td style="display: flex;">
-            <div id="info-container">
-                <span id="info-icon">&#9432;</span>
-                <div id="info-content">
-                    <p>The tricep measurement is taken as a vertical fold, midway between the acromion and olecranon processes</p>
-                </div>
-            </div>
-            &ThinSpace; Tricep
-        </td>
-        <td>
-            <input type="number" name="tricep" id="tricep" value="5">
-            <label id="tricep-label" for="tricep">mm</label>
-        </td>
-    </tr>
-    <tr>
-        <td style="display: flex;">
-            <div id="info-container">
-                <span id="info-icon">&#9432;</span>
-                <div id="info-content">
-                    <p>The suprailiac measurement is taken as a diagonal fold, immediately superior to the iliac crest</p>
-                </div>
-            </div>
-            &ThinSpace; Suprailiac
-        </td>
-        <td>
-            <input type="number" name="suprailiac" id="suprailiac" value="10">
-            <label id="suprailiac-label" for="suprailiac">mm</label>
-        </td>
-    </tr>
-    <tr>
-        <td style="display: flex;">
-            <div id="info-container">
-                <span id="info-icon">&#9432;</span>
-                <div id="info-content">
-                    <p>The subscapular measurement is taken as a diagonal fold, directly below the inferior angle of the scapula</p>
-                </div>
-            </div>
-            &ThinSpace; Subscapular
-        </td>
-        <td>
-            <input type="number" name="subscapular" id="subscapular" value="5">
-            <label id="subscapular-label" for="subscapular">mm</label>
-        </td>
-    </tr>
-    <tr>
-        <td style="display: flex;">
-            <div id="info-container">
-                <span id="info-icon">&#9432;</span>
-                <div id="info-content">
-                    <p>The mid-axillary measurement is taken as a vertical fold, on the mid-axillary line at the level of the xiphoid process of the sternum</p>
-                </div>
-            </div>
-            &ThinSpace; Mid-Axillary
-        </td>
-        <td>
-            <input type="number" name="mid-axillary" id="mid-axillary" value="5">
-            <label id="mid-axillary-label" for="mid-axillary">mm</label>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2" style="text-align: center;">
-            <button id="calculate">Calculate</button>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Body Fat Percentage:
-        </td>
-        <td>
-            <input type="number" name="bfp" id="bfp" disabled>
-            <label id="bfp-label" for="bfp">%</label>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2" style="text-align: center;">
-            <div class="bfp-grid" id="bfp-grid"></div>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            This calculator is based on the Jackson-Pollock 7-Site Caliper Method <br>
-            Although this method is not as accurate as the DEXA scan, it is a good way to estimate your body fat percentage.
-            <a href="https://www.topendsports.com/testing/density-jackson-pollock.htm">[Source]</a> <br>
-            For more visual help on how to take the measurements, please refer to <a href="http://www.unit-conversion.info/img/male-7site-Jackson-Pollock.png">this image</a> <br>
-            Credit: <a href="http://www.unit-conversion.info/othertools/7-site-mens-percent-body-fat/">unit-conversion.info</a><br> 
-        </td>
-    </tr>
-</table>
-<script>
-    const colors = ['#cab999', '#cdb38d', '#d1ae80', '#d49974', '#d78368', '#db6d5b', '#df574f', '#e24242'];
-    // const colors = ['#bde2fc', '#addbf7', '#9cc6f3', '#8cb1ee', '#7b9ce9', '#6b87e4', '#5a72df', '#4a5dd9'];
-    const grid = document.getElementById("bfp-grid");
-    for (let i = 0; i < 8; i++) {
-        let cell = document.createElement("div");
-        cell.classList.add("bfp-grid-cell");
-        cell.style.backgroundColor = colors[i];
-        grid.appendChild(cell);
-    }
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=0.5" />
+        <title>Body Fat Percentage Calculator</title>
+        <link rel="stylesheet" href="../style.css" />
+        <script src="../script.js"></script>
+    </head>
+    <body>
+        <div class="fixed-bg"></div>
+        <table id="main-table">
+            <colgroup>
+                <col style="width: 50%" />
+                <col style="width: 50%" />
+            </colgroup>
+            <th colspan="2">Body Fat Percentage Calculator</th>
+            <tr>
+                <td>Unit of Measurement:</td>
+                <td>
+                    <input type="radio" name="unit" id="imperial" checked />
+                    <label for="imperial">Imperial</label>
+                    <input type="radio" name="unit" id="metric" />
+                    <label for="metric">Metric</label>
+                </td>
+            </tr>
+            <tr>
+                <td>Gender:</td>
+                <td>
+                    <input type="radio" name="gender" id="male" checked />
+                    <label for="male">Male</label>
+                    <input type="radio" name="gender" id="female" />
+                    <label for="female">Female</label>
+                </td>
+            </tr>
+            <tr>
+                <td>Weight:</td>
+                <td style="width: 50%">
+                    <input type="number" name="weight" id="weight" />
+                    <label id="weight-label" for="weight">lbs</label>
+                </td>
+            </tr>
+            <tr>
+                <td>Age:</td>
+                <td>
+                    <input type="number" name="age" id="age" />
+                    <label id="age-label" for="age">years</label>
+                </td>
+            </tr>
+            <tr>
+                <td style="display: flex">
+                    <div id="info-container">
+                        <span id="info-icon">&#9432;</span>&ThinSpace; Chest
+                        <div id="info-content">
+                            <p>
+                                The chest measurement is taken as a diagonal
+                                fold, halfway between the anterior axillary line
+                                and nipple
+                            </p>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <input type="number" name="chest" id="chest" value="15" />
+                    <label id="chest-label" for="chest">mm</label>
+                </td>
+            </tr>
+            <tr>
+                <td style="display: flex">
+                    <div id="info-container">
+                        <span id="info-icon">&#9432;</span>&ThinSpace; Abdominal
+                        <div id="info-content">
+                            <p>
+                                The abdominal measurement is taken as a vertical
+                                fold, 2cm to the right side of the umbilicus
+                            </p>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <input
+                        type="number"
+                        name="abdominal"
+                        id="abdominal"
+                        value="25"
+                    />
+                    <label id="abdominal-label" for="abdominal">mm</label>
+                </td>
+            </tr>
+            <tr>
+                <td style="display: flex">
+                    <div id="info-container">
+                        <span id="info-icon">&#9432;</span>&ThinSpace; Thigh
+                        <div id="info-content">
+                            <p>
+                                The thigh measurement is taken as a vertical
+                                fold, midway between the proximal border of the
+                                patella and the inguinal crease
+                            </p>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <input type="number" name="thigh" id="thigh" value="15" />
+                    <label id="thigh-label" for="thigh">mm</label>
+                </td>
+            </tr>
+            <tr>
+                <td style="display: flex">
+                    <div id="info-container">
+                        <span id="info-icon">&#9432;</span>&ThinSpace; Tricep
+                        <div id="info-content">
+                            <p>
+                                The tricep measurement is taken as a vertical
+                                fold, midway between the acromion and olecranon
+                                processes
+                            </p>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <input type="number" name="tricep" id="tricep" value="5" />
+                    <label id="tricep-label" for="tricep">mm</label>
+                </td>
+            </tr>
+            <tr>
+                <td style="display: flex">
+                    <div id="info-container">
+                        <span id="info-icon">&#9432;</span>&ThinSpace;
+                        Suprailiac
+                        <div id="info-content">
+                            <p>
+                                The suprailiac measurement is taken as a
+                                diagonal fold, immediately superior to the iliac
+                                crest
+                            </p>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <input
+                        type="number"
+                        name="suprailiac"
+                        id="suprailiac"
+                        value="10"
+                    />
+                    <label id="suprailiac-label" for="suprailiac">mm</label>
+                </td>
+            </tr>
+            <tr>
+                <td style="display: flex">
+                    <div id="info-container">
+                        <span id="info-icon">&#9432;</span>&ThinSpace;
+                        Subscapular
+                        <div id="info-content">
+                            <p>
+                                The subscapular measurement is taken as a
+                                diagonal fold, directly below the inferior angle
+                                of the scapula
+                            </p>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <input
+                        type="number"
+                        name="subscapular"
+                        id="subscapular"
+                        value="5"
+                    />
+                    <label id="subscapular-label" for="subscapular">mm</label>
+                </td>
+            </tr>
+            <tr>
+                <td style="display: flex">
+                    <div id="info-container">
+                        <span id="info-icon">&#9432;</span>&ThinSpace;
+                        Mid-Axillary
+                        <div id="info-content">
+                            <p>
+                                The mid-axillary measurement is taken as a
+                                vertical fold, on the mid-axillary line at the
+                                level of the xiphoid process of the sternum
+                            </p>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <input
+                        type="number"
+                        name="mid-axillary"
+                        id="mid-axillary"
+                        value="5"
+                    />
+                    <label id="mid-axillary-label" for="mid-axillary">mm</label>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center">
+                    <button id="calculate">Calculate</button>
+                </td>
+            </tr>
+            <tr>
+                <td>Body Fat Percentage:</td>
+                <td>
+                    <input type="number" name="bfp" id="bfp" disabled />
+                    <label id="bfp-label" for="bfp">%</label>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center">
+                    <div class="bfp-grid" id="bfp-grid"></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    This calculator is based on the Jackson-Pollock 7-Site
+                    Caliper Method <br />
+                    Although this method is not as accurate as the DEXA scan, it
+                    is a good way to estimate your body fat percentage.
+                    <a
+                        href="https://www.topendsports.com/testing/density-jackson-pollock.htm"
+                        >[Source]</a
+                    >
+                    <br />
+                    For more visual help on how to take the measurements, please
+                    refer to
+                    <a
+                        href="http://www.unit-conversion.info/img/male-7site-Jackson-Pollock.png"
+                        >this image</a
+                    >
+                    <br />
+                    Credit:
+                    <a
+                        href="http://www.unit-conversion.info/othertools/7-site-mens-percent-body-fat/"
+                        >unit-conversion.info</a
+                    ><br />
+                </td>
+            </tr>
+        </table>
+        <script>
+            const colors = [
+                "#cab999",
+                "#cdb38d",
+                "#d1ae80",
+                "#d49974",
+                "#d78368",
+                "#db6d5b",
+                "#df574f",
+                "#e24242",
+            ];
+            // const colors = ['#bde2fc', '#addbf7', '#9cc6f3', '#8cb1ee', '#7b9ce9', '#6b87e4', '#5a72df', '#4a5dd9'];
+            const grid = document.getElementById("bfp-grid");
+            for (let i = 0; i < 8; i++) {
+                let cell = document.createElement("div");
+                cell.classList.add("bfp-grid-cell");
+                cell.style.backgroundColor = colors[i];
+                grid.appendChild(cell);
+            }
 
-    document.getElementById('calculate').addEventListener('click', function () {
-        let weight      = parseInt(document.getElementById('weight').value);
-        if (isImperial) {
-            weight *= 0.453592;
-        }
-        let age         = parseInt(document.getElementById('age').value);
-        let chest       = parseInt(document.getElementById('chest').value);
-        let abdominal   = parseInt(document.getElementById('abdominal').value);
-        let thigh       = parseInt(document.getElementById('thigh').value);
-        let tricep      = parseInt(document.getElementById('tricep').value);
-        let suprailiac  = parseInt(document.getElementById('suprailiac').value);
-        let subscapular = parseInt(document.getElementById('subscapular').value);
-        let midAxillary = parseInt(document.getElementById('mid-axillary').value);
-        let sumOfAllMeasurements = chest + abdominal + thigh + tricep + suprailiac + subscapular + midAxillary;
-        let allMeasurementsSquared = sumOfAllMeasurements * sumOfAllMeasurements;
-        let bfp = 0;
-        if (document.getElementById('male').checked) {
-            let bodyDensity = 1.112 - (0.00043499 * sumOfAllMeasurements) + (0.00000055 * allMeasurementsSquared) - (0.00028826 * age);
-            bfp = ((4.95 / bodyDensity) - 4.5) * 100;
-        } else {
-            let bodyDensity = 1.097 - (0.00046971 * sumOfAllMeasurements) + (0.00000056 * allMeasurementsSquared) - (0.00012828 * age);
-            bfp = ((4.95 / bodyDensity) - 4.5) * 100;
-        }
-        document.getElementById('bfp').value = bfp.toFixed(2);
-        resetGrid();
-        setClass();
-    });
+            document
+                .getElementById("calculate")
+                .addEventListener("click", function () {
+                    let weight = parseInt(
+                        document.getElementById("weight").value
+                    );
+                    if (isImperial) {
+                        weight *= 0.453592;
+                    }
+                    let age = parseInt(document.getElementById("age").value);
+                    let chest = parseInt(
+                        document.getElementById("chest").value
+                    );
+                    let abdominal = parseInt(
+                        document.getElementById("abdominal").value
+                    );
+                    let thigh = parseInt(
+                        document.getElementById("thigh").value
+                    );
+                    let tricep = parseInt(
+                        document.getElementById("tricep").value
+                    );
+                    let suprailiac = parseInt(
+                        document.getElementById("suprailiac").value
+                    );
+                    let subscapular = parseInt(
+                        document.getElementById("subscapular").value
+                    );
+                    let midAxillary = parseInt(
+                        document.getElementById("mid-axillary").value
+                    );
+                    let sumOfAllMeasurements =
+                        chest +
+                        abdominal +
+                        thigh +
+                        tricep +
+                        suprailiac +
+                        subscapular +
+                        midAxillary;
+                    let allMeasurementsSquared =
+                        sumOfAllMeasurements * sumOfAllMeasurements;
+                    let bfp = 0;
+                    if (document.getElementById("male").checked) {
+                        let bodyDensity =
+                            1.112 -
+                            0.00043499 * sumOfAllMeasurements +
+                            0.00000055 * allMeasurementsSquared -
+                            0.00028826 * age;
+                        bfp = (4.95 / bodyDensity - 4.5) * 100;
+                    } else {
+                        let bodyDensity =
+                            1.097 -
+                            0.00046971 * sumOfAllMeasurements +
+                            0.00000056 * allMeasurementsSquared -
+                            0.00012828 * age;
+                        bfp = (4.95 / bodyDensity - 4.5) * 100;
+                    }
+                    document.getElementById("bfp").value = bfp.toFixed(2);
+                    resetGrid();
+                    setClass();
+                });
 
-    function resetGrid() {
-        for (let i = 0; i < 8; i++) {
-            grid.children[i].style.border = '1px solid #ccc';
-        }
-    }
-
-    function setClass() {
-        let bfp = parseInt(document.getElementById('bfp').value);
-        if (document.getElementById('male').checked) {
-            if (bfp > 0) {
-                if (bfp < 8.9) {
-                    grid.children[0].style.border = '2px solid #000000';
-                } else if (bfp < 13.9) {
-                    grid.children[1].style.border = '2px solid #000000';
-                } else if (bfp < 17.9) {
-                    grid.children[2].style.border = '2px solid #000000';
-                } else if (bfp < 20.9) {
-                    grid.children[3].style.border = '2px solid #000000';
-                } else if (bfp < 24.9) {
-                    grid.children[4].style.border = '2px solid #000000';
-                } else if (bfp < 28.9) {
-                    grid.children[5].style.border = '2px solid #000000';
-                } else if (bfp < 31.9) {
-                    grid.children[6].style.border = '2px solid #000000';
-                } else {
-                    grid.children[7].style.border = '2px solid #000000';
+            function resetGrid() {
+                for (let i = 0; i < 8; i++) {
+                    grid.children[i].style.border = "1px solid #ccc";
                 }
             }
-        } else {
-            if (bfp > 0) {
-                if (bfp < 21.9) {
-                    grid.children[0].style.border = '2px solid #000000';
-                } else if (bfp < 24.9) {
-                    grid.children[1].style.border = '2px solid #000000';
-                } else if (bfp < 28.9) {
-                    grid.children[2].style.border = '2px solid #000000';
-                } else if (bfp < 31.9) {
-                    grid.children[3].style.border = '2px solid #000000';
-                } else if (bfp < 35.9) {
-                    grid.children[4].style.border = '2px solid #000000';
-                } else if (bfp < 38.9) {
-                    grid.children[5].style.border = '2px solid #000000';
-                } else if (bfp < 41.9) {
-                    grid.children[6].style.border = '2px solid #000000';
+
+            function setClass() {
+                let bfp = parseInt(document.getElementById("bfp").value);
+                if (document.getElementById("male").checked) {
+                    if (bfp > 0) {
+                        if (bfp < 8.9) {
+                            grid.children[0].style.border = "2px solid #000000";
+                        } else if (bfp < 13.9) {
+                            grid.children[1].style.border = "2px solid #000000";
+                        } else if (bfp < 17.9) {
+                            grid.children[2].style.border = "2px solid #000000";
+                        } else if (bfp < 20.9) {
+                            grid.children[3].style.border = "2px solid #000000";
+                        } else if (bfp < 24.9) {
+                            grid.children[4].style.border = "2px solid #000000";
+                        } else if (bfp < 28.9) {
+                            grid.children[5].style.border = "2px solid #000000";
+                        } else if (bfp < 31.9) {
+                            grid.children[6].style.border = "2px solid #000000";
+                        } else {
+                            grid.children[7].style.border = "2px solid #000000";
+                        }
+                    }
                 } else {
-                    grid.children[7].style.border = '2px solid #000000';
+                    if (bfp > 0) {
+                        if (bfp < 21.9) {
+                            grid.children[0].style.border = "2px solid #000000";
+                        } else if (bfp < 24.9) {
+                            grid.children[1].style.border = "2px solid #000000";
+                        } else if (bfp < 28.9) {
+                            grid.children[2].style.border = "2px solid #000000";
+                        } else if (bfp < 31.9) {
+                            grid.children[3].style.border = "2px solid #000000";
+                        } else if (bfp < 35.9) {
+                            grid.children[4].style.border = "2px solid #000000";
+                        } else if (bfp < 38.9) {
+                            grid.children[5].style.border = "2px solid #000000";
+                        } else if (bfp < 41.9) {
+                            grid.children[6].style.border = "2px solid #000000";
+                        } else {
+                            grid.children[7].style.border = "2px solid #000000";
+                        }
+                    }
                 }
             }
-        }
-    }
-    addHomeButton('main-table');
-</script>
-</body>
+            addHomeButton("main-table");
+        </script>
+    </body>
 </html>

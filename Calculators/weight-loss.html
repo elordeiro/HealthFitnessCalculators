@@ -1,321 +1,373 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.8">
-    <title>Weight Loss</title>
-    <link rel="stylesheet" href="../style.css">
-    <script src="../script.js"></script>
-</head>
-<body>
-<table id="main-table">
-    <colgroup>
-        <col style="width: 50%;">
-        <col style="width: 50%;">
-    </colgroup>
-    <th colspan="2">
-        Weight Loss Calculator
-    </th>
-    <tr>
-        <td>
-            Unit of Measurement:
-        </td>
-        <td>
-            <input type="radio" name="unit" id="imperial" checked>
-            <label for="imperial">Imperial</label>
-            <input type="radio" name="unit" id="metric">
-            <label for="metric">Metric</label>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Gender:
-        </td>
-        <td>
-            <input type="radio" name="gender" id="male" checked>
-            <label for="male">Male</label>
-            <input type="radio" name="gender" id="female">
-            <label for="female">Female</label>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Weight:
-        </td>
-        <td style="width: 50%;">
-            <input type="number" name="weight" id="weight">
-            <label id="weight-label" for="weight">lbs</label>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Height:
-        </td>
-        <td style="width: 50%;">
-            <input type="number" name="height" id="height">
-            <label id="height-label" for="height">in</label>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Age:
-        </td>
-        <td>
-            <input type="number" name="age" id="age">
-            <label id="age-label" for="age">years</label>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Activity Level:
-        </td>
-        <td>
-            <select name="activity-level" id="activity-level">
-                <option value="1.15">Sedentary (Little to no exercise)</option>
-                <option value="1.3">Lightly Active (1 - 3 Hours of exercise per week)</option>
-                <option value="1.5">Moderately Active (4 - 6 Hours of exercise per week)</option>
-                <option value="1.7">Very Active (7 - 9 Hours of exercise per week)</option>
-                <option value="1.9">Extremely Active (10+ Hours of exercise per week)</option>
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Body Fat Percentage:
-        </td>
-        <td>
-            <input type="number" name="body-fat" id="body-fat">
-            <label id="body-fat-label" for="body-fat">%</label>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Goal Weight:
-        </td>
-        <td>
-            <input type="number" name="goal" id="goal">
-            <label id="goal-label" for="goal">lbs</label>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Timeframe:
-        </td>
-        <td>
-            <input type="date" name="timeframe" id="timeframe">
-            <input type="number" name="days" id="days" style="width: 50px;" disabled>
-            <label id="timeframe-label" for="timeframe">days</label>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2" style="text-align: center;">
-            <button id="calculate">Calculate</button>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <table style="width: 100%;" id="sub-table">
-                <colgroup>
-                    <col style="width: 50%;">
-                    <col style="width: 50%;">
-                </colgroup>
-                <th colspan="2">
-                    Stats
-                </th>
-                <tr>
-                    <td>
-                        Total Daily Energy Expenditure:
-                    </td>
-                    <td>
-                        <input type="number" name="tdee" id="tdee" disabled>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Basal Metabolic Rate:
-                    </td>
-                    <td>
-                        <input type="number" name="bmr" id="bmr" disabled>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Lean Body Mass:
-                    </td>
-                    <td>
-                        <input type="number" name="lean-body-mass" id="lean-body-mass" disabled>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Body Fat Mass:
-                    </td>
-                    <td>
-                        <input type="number" name="body-fat-mass" id="body-fat-mass" disabled>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Target Calories
-                    </td>
-                    <td>
-                        <input type="number" name="target-calories" id="target-calories" disabled>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Final Body Fat Percentage:
-                    </td>
-                    <td>
-                        <input type="number" name="final-bfp" id="final-bfp" disabled>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2" style="text-align: left;">
-            For more information about TDEE checkout the <a href="TDEE.html">TDEE Calculator</a>. <br>
-            For more information about BMR checkout the <a href="BMR.html">BMR Calculator</a>.
-        </td>
-    </tr>
-    </table>
-    <script>
-        colorTableGradient('sub-table', '#F7FFF7', '#bde2fc', '#157d5a');
-        document.getElementById('imperial').addEventListener('click', function() {
-            if (isImperial) {
-                return;
-            }
-            document.getElementById('goal-label').innerHTML = 'lbs';
-            if (document.getElementById('goal').value > 0) {
-                document.getElementById('goal').value = (document.getElementById('goal').value * 2.205).toFixed();
-            }
-        });
-        
-        document.getElementById('metric').addEventListener('click', function() {
-            if (!isImperial) {
-                return;
-            }
-            document.getElementById('goal-label').innerHTML = 'kg';
-            if (document.getElementById('goal').value > 0) {
-                document.getElementById('goal').value = (document.getElementById('goal').value / 2.205).toFixed();
-            }
-        });
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=0.8" />
+        <title>Weight Loss</title>
+        <link rel="stylesheet" href="../style.css" />
+        <script src="../script.js"></script>
+    </head>
+    <body>
+        <div class="fixed-bg"></div>
+        <table id="main-table">
+            <colgroup>
+                <col style="width: 50%" />
+                <col style="width: 50%" />
+            </colgroup>
+            <th colspan="2">Weight Loss Calculator</th>
+            <tr>
+                <td>Unit of Measurement:</td>
+                <td>
+                    <input type="radio" name="unit" id="imperial" checked />
+                    <label for="imperial">Imperial</label>
+                    <input type="radio" name="unit" id="metric" />
+                    <label for="metric">Metric</label>
+                </td>
+            </tr>
+            <tr>
+                <td>Gender:</td>
+                <td>
+                    <input type="radio" name="gender" id="male" checked />
+                    <label for="male">Male</label>
+                    <input type="radio" name="gender" id="female" />
+                    <label for="female">Female</label>
+                </td>
+            </tr>
+            <tr>
+                <td>Weight:</td>
+                <td style="width: 50%">
+                    <input type="number" name="weight" id="weight" />
+                    <label id="weight-label" for="weight">lbs</label>
+                </td>
+            </tr>
+            <tr>
+                <td>Height:</td>
+                <td style="width: 50%">
+                    <input type="number" name="height" id="height" />
+                    <label id="height-label" for="height">in</label>
+                </td>
+            </tr>
+            <tr>
+                <td>Age:</td>
+                <td>
+                    <input type="number" name="age" id="age" />
+                    <label id="age-label" for="age">years</label>
+                </td>
+            </tr>
+            <tr>
+                <td>Activity Level:</td>
+                <td>
+                    <select name="activity-level" id="activity-level">
+                        <option value="1.15">
+                            Sedentary (Little to no exercise)
+                        </option>
+                        <option value="1.3">
+                            Lightly Active (1 - 3 Hours of exercise per week)
+                        </option>
+                        <option value="1.5">
+                            Moderately Active (4 - 6 Hours of exercise per week)
+                        </option>
+                        <option value="1.7">
+                            Very Active (7 - 9 Hours of exercise per week)
+                        </option>
+                        <option value="1.9">
+                            Extremely Active (10+ Hours of exercise per week)
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Body Fat Percentage:</td>
+                <td>
+                    <input type="number" name="body-fat" id="body-fat" />
+                    <label id="body-fat-label" for="body-fat">%</label>
+                </td>
+            </tr>
+            <tr>
+                <td>Goal Weight:</td>
+                <td>
+                    <input type="number" name="goal" id="goal" />
+                    <label id="goal-label" for="goal">lbs</label>
+                </td>
+            </tr>
+            <tr>
+                <td>Timeframe:</td>
+                <td>
+                    <input type="date" name="timeframe" id="timeframe" />
+                    <input
+                        type="number"
+                        name="days"
+                        id="days"
+                        style="width: 50px"
+                        disabled
+                    />
+                    <label id="timeframe-label" for="timeframe">days</label>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center">
+                    <button id="calculate">Calculate</button>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <table style="width: 100%" id="sub-table">
+                        <colgroup>
+                            <col style="width: 50%" />
+                            <col style="width: 50%" />
+                        </colgroup>
+                        <th colspan="2">Stats</th>
+                        <tr>
+                            <td>Total Daily Energy Expenditure:</td>
+                            <td>
+                                <input
+                                    type="number"
+                                    name="tdee"
+                                    id="tdee"
+                                    disabled
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Basal Metabolic Rate:</td>
+                            <td>
+                                <input
+                                    type="number"
+                                    name="bmr"
+                                    id="bmr"
+                                    disabled
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Lean Body Mass:</td>
+                            <td>
+                                <input
+                                    type="number"
+                                    name="lean-body-mass"
+                                    id="lean-body-mass"
+                                    disabled
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Body Fat Mass:</td>
+                            <td>
+                                <input
+                                    type="number"
+                                    name="body-fat-mass"
+                                    id="body-fat-mass"
+                                    disabled
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Target Calories</td>
+                            <td>
+                                <input
+                                    type="number"
+                                    name="target-calories"
+                                    id="target-calories"
+                                    disabled
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Final Body Fat Percentage:</td>
+                            <td>
+                                <input
+                                    type="number"
+                                    name="final-bfp"
+                                    id="final-bfp"
+                                    disabled
+                                />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: left">
+                    For more information about TDEE checkout the
+                    <a href="TDEE.html">TDEE Calculator</a>. <br />
+                    For more information about BMR checkout the
+                    <a href="BMR.html">BMR Calculator</a>.
+                </td>
+            </tr>
+        </table>
+        <script>
+            colorTableGradient("sub-table", "#F7FFF7", "#bde2fc", "#157d5a");
+            document
+                .getElementById("imperial")
+                .addEventListener("click", function () {
+                    if (isImperial) {
+                        return;
+                    }
+                    document.getElementById("goal-label").innerHTML = "lbs";
+                    if (document.getElementById("goal").value > 0) {
+                        document.getElementById("goal").value = (
+                            document.getElementById("goal").value * 2.205
+                        ).toFixed();
+                    }
+                });
 
-        document.getElementById('timeframe').addEventListener('change', function() {
-            let timeframe = document.getElementById('timeframe').valueAsNumber;
-            let today = new Date();
-            let todayMs = today.getTime();
-            let timeframeMs = timeframe;
-            let difference = timeframeMs - todayMs;
-            let days = difference / (1000 * 3600 * 24) + 1;
-            document.getElementById('days').value = days.toFixed();
-        });
+            document
+                .getElementById("metric")
+                .addEventListener("click", function () {
+                    if (!isImperial) {
+                        return;
+                    }
+                    document.getElementById("goal-label").innerHTML = "kg";
+                    if (document.getElementById("goal").value > 0) {
+                        document.getElementById("goal").value = (
+                            document.getElementById("goal").value / 2.205
+                        ).toFixed();
+                    }
+                });
 
-        document.getElementById('calculate').addEventListener('click', function () {
-            if (document.getElementById('error')) {
-                document.getElementById('error').remove();
-            }
-            let weight = document.getElementById('weight').value;
-            let height = document.getElementById('height').value;
-            let age = document.getElementById('age').value;
-            let bmr = 0;
-            if (document.getElementById('imperial').checked) {
-                if (document.getElementById('male').checked) {
-                    bmr = 4.536 * weight + 15.88 * height - 5 * age + 5;
-                } else {
-                    bmr = 4.536 * weight + 15.88 * height - 5 * age - 161;
-                }
-            } else {
-                if (document.getElementById('male').checked) {
-                    bmr = 10 * weight + 6.25 * height - 5 * age + 5;
-                } else {
-                    bmr = 10 * weight + 6.25 * height - 5 * age - 161;
-                }
-            }
-            document.getElementById('bmr').value = bmr.toFixed();
-            
-            let tdee = bmr * parseFloat(document.getElementById('activity-level').value);
-            document.getElementById('tdee').value = tdee.toFixed();
-            
-            let bodyFat = document.getElementById('body-fat').value;
-            let leanBodyMass = weight * (1 - (bodyFat / 100));
-            let bodyFatMass = weight - leanBodyMass;
-            document.getElementById('lean-body-mass').value = leanBodyMass.toFixed(2);
-            document.getElementById('body-fat-mass').value = bodyFatMass.toFixed(2);
-            
-            let goal = document.getElementById('goal').value;
-            if (goal > weight) {
-                document.getElementById('goal').value = weight;
-                goal = weight;
-            }
-            
-            let timeframe = document.getElementById('days').value;
-            let targetCalories = 0;
-            if (isImperial) {
-                targetCalories = tdee - ((3500 * (weight - goal)) / timeframe);
-                if (targetCalories < 500) {
-                    caloriesTooLow();
-                    return;
-                }
-                if (targetCalories < tdee * 0.85) {
-                    caloriesLow(targetCalories);
-                }
-            } else {
-                targetCalories = tdee - ((7700 * (weight - goal)) / timeframe);
-                if (targetCalories < 1100) {
-                    caloriesTooLow();
-                    return;
-                }
-                if (targetCalories < tdee * 0.85) {
-                    caloriesLow(targetCalories);
-                }
-            }
-            let weightLost = weight - goal;
-            weight -= weightLost;
-            bodyFatMass -= (weightLost * 0.75);
-            document.getElementById('final-bfp').value = (bodyFatMass / weight).toFixed(2) * 100;
-            document.getElementById('target-calories').value = targetCalories.toFixed();
+            document
+                .getElementById("timeframe")
+                .addEventListener("change", function () {
+                    let timeframe =
+                        document.getElementById("timeframe").valueAsNumber;
+                    let today = new Date();
+                    let todayMs = today.getTime();
+                    let timeframeMs = timeframe;
+                    let difference = timeframeMs - todayMs;
+                    let days = difference / (1000 * 3600 * 24) + 1;
+                    document.getElementById("days").value = days.toFixed();
+                });
 
-        });
-        
-        function caloriesTooLow() {
-            document.getElementById('tdee').value = 0;
-            document.getElementById('bmr').value = 0; 
-            document.getElementById('lean-body-mass').value = 0;
-            document.getElementById('body-fat-mass').value = 0;
-            document.getElementById('target-calories').value = 0;
-            document.getElementById('final-bfp').value = 0;
-            const mainTable = document.getElementById('main-table');
-            const newRow = mainTable.insertRow(10);
-            newRow.id = 'error';
-            newRow.style.backgroundColor = '#ff0000';
-            newRow.style.color = '#ffffff';
-            const newCell = newRow.insertCell(0);
-            newCell.colSpan = 2;
-            newCell.innerHTML = 'Your target calories are too low. Please increase your goal weight or increase your timeframe.';
-        }
+            document
+                .getElementById("calculate")
+                .addEventListener("click", function () {
+                    if (document.getElementById("error")) {
+                        document.getElementById("error").remove();
+                    }
+                    let weight = document.getElementById("weight").value;
+                    let height = document.getElementById("height").value;
+                    let age = document.getElementById("age").value;
+                    let bmr = 0;
+                    if (document.getElementById("imperial").checked) {
+                        if (document.getElementById("male").checked) {
+                            bmr = 4.536 * weight + 15.88 * height - 5 * age + 5;
+                        } else {
+                            bmr =
+                                4.536 * weight + 15.88 * height - 5 * age - 161;
+                        }
+                    } else {
+                        if (document.getElementById("male").checked) {
+                            bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+                        } else {
+                            bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+                        }
+                    }
+                    document.getElementById("bmr").value = bmr.toFixed();
 
-        function caloriesLow(targetCalories) {
-            const mainTable = document.getElementById('main-table');
-            const newRow = mainTable.insertRow(10);
-            newRow.id = 'error';
-            newRow.style.backgroundColor = '#ff0000';
-            newRow.style.color = '#ffffff';
-            const newCell = newRow.insertCell(0);
-            newCell.colSpan = 2;
-            const minCalories = document.getElementById('tdee').value * 0.85;
-            const deficit = document.getElementById('tdee').value - minCalories;
-            const calorieIncrease = minCalories - targetCalories;
-            const calorieValue = document.getElementById('imperial').checked ? 3500 : 7700;
-            const minDays = Math.ceil((calorieValue * (document.getElementById('weight').value - document.getElementById('goal').value)) / deficit);
-            const dayIncrease = minDays - document.getElementById('days').value;
-            newCell.innerHTML = 'Your caloric deficit is greater than 15%. <br>' +
-                                `Consider increasing your calories by ${calorieIncrease.toFixed()} or<br>` +
-                                `Extend your timeframe by ${dayIncrease} day${dayIncrease === 1? '':'s'} to avoid muscle loss.`;
-        }
+                    let tdee =
+                        bmr *
+                        parseFloat(
+                            document.getElementById("activity-level").value
+                        );
+                    document.getElementById("tdee").value = tdee.toFixed();
 
-        addHomeButton('main-table');
-</script>
-</body>
+                    let bodyFat = document.getElementById("body-fat").value;
+                    let leanBodyMass = weight * (1 - bodyFat / 100);
+                    let bodyFatMass = weight - leanBodyMass;
+                    document.getElementById("lean-body-mass").value =
+                        leanBodyMass.toFixed(2);
+                    document.getElementById("body-fat-mass").value =
+                        bodyFatMass.toFixed(2);
+
+                    let goal = document.getElementById("goal").value;
+                    if (goal > weight) {
+                        document.getElementById("goal").value = weight;
+                        goal = weight;
+                    }
+
+                    let timeframe = document.getElementById("days").value;
+                    let targetCalories = 0;
+                    if (isImperial) {
+                        targetCalories =
+                            tdee - (3500 * (weight - goal)) / timeframe;
+                        if (targetCalories < 500) {
+                            caloriesTooLow();
+                            return;
+                        }
+                        if (targetCalories < tdee * 0.85) {
+                            caloriesLow(targetCalories);
+                        }
+                    } else {
+                        targetCalories =
+                            tdee - (7700 * (weight - goal)) / timeframe;
+                        if (targetCalories < 1100) {
+                            caloriesTooLow();
+                            return;
+                        }
+                        if (targetCalories < tdee * 0.85) {
+                            caloriesLow(targetCalories);
+                        }
+                    }
+                    let weightLost = weight - goal;
+                    weight -= weightLost;
+                    bodyFatMass -= weightLost * 0.75;
+                    document.getElementById("final-bfp").value =
+                        (bodyFatMass / weight).toFixed(2) * 100;
+                    document.getElementById("target-calories").value =
+                        targetCalories.toFixed();
+                });
+
+            function caloriesTooLow() {
+                document.getElementById("tdee").value = 0;
+                document.getElementById("bmr").value = 0;
+                document.getElementById("lean-body-mass").value = 0;
+                document.getElementById("body-fat-mass").value = 0;
+                document.getElementById("target-calories").value = 0;
+                document.getElementById("final-bfp").value = 0;
+                const mainTable = document.getElementById("main-table");
+                const newRow = mainTable.insertRow(10);
+                newRow.id = "error";
+                newRow.style.backgroundColor = "#ff0000";
+                newRow.style.color = "#ffffff";
+                const newCell = newRow.insertCell(0);
+                newCell.colSpan = 2;
+                newCell.innerHTML =
+                    "Your target calories are too low. Please increase your goal weight or increase your timeframe.";
+            }
+
+            function caloriesLow(targetCalories) {
+                const mainTable = document.getElementById("main-table");
+                const newRow = mainTable.insertRow(10);
+                newRow.id = "error";
+                newRow.style.backgroundColor = "#ff0000";
+                newRow.style.color = "#ffffff";
+                const newCell = newRow.insertCell(0);
+                newCell.colSpan = 2;
+                const minCalories =
+                    document.getElementById("tdee").value * 0.85;
+                const deficit =
+                    document.getElementById("tdee").value - minCalories;
+                const calorieIncrease = minCalories - targetCalories;
+                const calorieValue = document.getElementById("imperial").checked
+                    ? 3500
+                    : 7700;
+                const minDays = Math.ceil(
+                    (calorieValue *
+                        (document.getElementById("weight").value -
+                            document.getElementById("goal").value)) /
+                        deficit
+                );
+                const dayIncrease =
+                    minDays - document.getElementById("days").value;
+                newCell.innerHTML =
+                    "Your caloric deficit is greater than 15%. <br>" +
+                    `Consider increasing your calories by ${calorieIncrease.toFixed()} or<br>` +
+                    `Extend your timeframe by ${dayIncrease} day${
+                        dayIncrease === 1 ? "" : "s"
+                    } to avoid muscle loss.`;
+            }
+
+            addHomeButton("main-table");
+        </script>
+    </body>
 </html>

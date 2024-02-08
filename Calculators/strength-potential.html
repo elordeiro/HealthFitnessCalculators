@@ -1,212 +1,224 @@
 <!DOCTYPE html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.53">
-    <title>Strength Potential Calculator</title>
-    <link rel="stylesheet" href="../style.css">
-    <script src="../script.js"></script>
-</head>
-<body>
-<table id="main-table">
-    <colgroup>
-        <col style="width: 50%;">
-        <col style="width: 50%;">
-    </colgroup>
-    <th colspan="2">
-        Strength Potential Calculator
-    </th>
-    <tr>
-        <td>
-            Unit of Measurement:
-        </td>
-        <td>
-            <input type="radio" name="unit" id="imperial" checked>
-            <label for="imperial">Imperial</label>
-            <input type="radio" name="unit" id="metric">
-            <label for="metric">Metric</label>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Gender:
-        </td>
-        <td>
-            <input type="radio" name="gender" id="male" checked>
-            <label for="male">Male</label>
-            <input type="radio" name="gender" id="female">
-            <label for="female">Female</label>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Weight:
-        </td>
-        <td style="width: 50%;">
-            <input type="number" name="weight" id="weight">
-            <label id="weight-label" for="weight">lbs</label>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Height:
-        </td>
-        <td style="width: 50%;">
-            <input type="number" name="height" id="height">
-            <label id="height-label" for="height">in</label>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2" style="text-align: center;">
-            <button id="calculate">Calculate</button>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <table id="stats-table" style="text-align: center;">
-                <colgroup>
-                    <col style="width: 15%;">
-                    <col style="width: 14%;">
-                    <col style="width: 14%;">
-                    <col style="width: 14%;">
-                    <col style="width: 14%;">
-                    <col style="width: 14%;">
-                    <col style="width: 14%;">
-                </colgroup>
-                <th>
-                    Stats
-                    <label id="stats-label">(lbs)</label>
-                </th>
-                <th>
-                    Beginner
-                </th>
-                <th>
-                    Novice
-                </th>
-                <th>
-                    Intermediate
-                </th>
-                <th>
-                    Advanced
-                </th>
-                <th>
-                    Elite
-                </th>
-                <th>
-                    World Class
-                </th>
-                <tr id="squat-row">
-                    <td>
-                        Squat
-                    </td>
-                </tr>
-                <tr id="bp-row">
-                    <td>
-                        Bench Press
-                    </td>
-                </tr>
-                <tr id="deadlift-row">
-                    <td>
-                        Deadlift
-                    </td>
-                </tr>
-                <tr id="total-row">
-                    <td>
-                        Total
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            This calculator attempts to predict your strength by comparing it to the strength of elite level athletes. <br>
-            Keep in mind that these calculations were done on <u><i>allegedly</i></u> drug-free athletes. <br>
-            <a href="https://www.strongerbyscience.com/your-drug-free-muscle-and-strength-potential-part-2/">[Source]</a>.
-        </td>
-    </tr>
-</table>
-<script>
-    const table       = document.getElementById('tableId');
-    const squatRow    = document.getElementById('squat-row');
-    const bpRow       = document.getElementById('bp-row');
-    const deadliftRow = document.getElementById('deadlift-row');
-    const totalRow    = document.getElementById('total-row');
-    const rows = [squatRow, bpRow, deadliftRow, totalRow];
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=0.53"
+        />
+        <title>Strength Potential Calculator</title>
+        <link rel="stylesheet" href="../style.css" />
+        <script src="../script.js"></script>
+    </head>
+    <body>
+        <div class="fixed-bg"></div>
+        <table id="main-table">
+            <colgroup>
+                <col style="width: 50%" />
+                <col style="width: 50%" />
+            </colgroup>
+            <th colspan="2">Strength Potential Calculator</th>
+            <tr>
+                <td>Unit of Measurement:</td>
+                <td>
+                    <input type="radio" name="unit" id="imperial" checked />
+                    <label for="imperial">Imperial</label>
+                    <input type="radio" name="unit" id="metric" />
+                    <label for="metric">Metric</label>
+                </td>
+            </tr>
+            <tr>
+                <td>Gender:</td>
+                <td>
+                    <input type="radio" name="gender" id="male" checked />
+                    <label for="male">Male</label>
+                    <input type="radio" name="gender" id="female" />
+                    <label for="female">Female</label>
+                </td>
+            </tr>
+            <tr>
+                <td>Weight:</td>
+                <td style="width: 50%">
+                    <input type="number" name="weight" id="weight" />
+                    <label id="weight-label" for="weight">lbs</label>
+                </td>
+            </tr>
+            <tr>
+                <td>Height:</td>
+                <td style="width: 50%">
+                    <input type="number" name="height" id="height" />
+                    <label id="height-label" for="height">in</label>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center">
+                    <button id="calculate">Calculate</button>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <table id="stats-table" style="text-align: center">
+                        <colgroup>
+                            <col style="width: 15%" />
+                            <col style="width: 14%" />
+                            <col style="width: 14%" />
+                            <col style="width: 14%" />
+                            <col style="width: 14%" />
+                            <col style="width: 14%" />
+                            <col style="width: 14%" />
+                        </colgroup>
+                        <th>
+                            Stats
+                            <label id="stats-label">(lbs)</label>
+                        </th>
+                        <th>Beginner</th>
+                        <th>Novice</th>
+                        <th>Intermediate</th>
+                        <th>Advanced</th>
+                        <th>Elite</th>
+                        <th>World Class</th>
+                        <tr id="squat-row">
+                            <td>Squat</td>
+                        </tr>
+                        <tr id="bp-row">
+                            <td>Bench Press</td>
+                        </tr>
+                        <tr id="deadlift-row">
+                            <td>Deadlift</td>
+                        </tr>
+                        <tr id="total-row">
+                            <td>Total</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    This calculator attempts to predict your strength by
+                    comparing it to the strength of elite level athletes. <br />
+                    Keep in mind that these calculations were done on
+                    <u><i>allegedly</i></u> drug-free athletes. <br />
+                    <a
+                        href="https://www.strongerbyscience.com/your-drug-free-muscle-and-strength-potential-part-2/"
+                        >[Source]</a
+                    >.
+                </td>
+            </tr>
+        </table>
+        <script>
+            const table = document.getElementById("tableId");
+            const squatRow = document.getElementById("squat-row");
+            const bpRow = document.getElementById("bp-row");
+            const deadliftRow = document.getElementById("deadlift-row");
+            const totalRow = document.getElementById("total-row");
+            const rows = [squatRow, bpRow, deadliftRow, totalRow];
 
-    function finishStatsTableRender(tableId) {
-        for (let i = 0; i < 6; i++) {
-            for (let j = 0; j < 4; j++) {
-                const input = Object.assign(document.createElement('input'), {
-                    type: 'number',
-                    style: 'width: 65px',
-                    disabled: true,
-                });
-                const col = rows[j].insertCell();
-                col.appendChild(input);
+            function finishStatsTableRender(tableId) {
+                for (let i = 0; i < 6; i++) {
+                    for (let j = 0; j < 4; j++) {
+                        const input = Object.assign(
+                            document.createElement("input"),
+                            {
+                                type: "number",
+                                style: "width: 65px",
+                                disabled: true,
+                            }
+                        );
+                        const col = rows[j].insertCell();
+                        col.appendChild(input);
+                    }
+                }
             }
-        }
-    }
-    finishStatsTableRender('stats-table')
+            finishStatsTableRender("stats-table");
 
-    let needsRecalc = false;
-    document.getElementById('imperial').addEventListener('click', function () {
-        if (isImperial) {
-            return;
-        }
+            let needsRecalc = false;
+            document
+                .getElementById("imperial")
+                .addEventListener("click", function () {
+                    if (isImperial) {
+                        return;
+                    }
 
-        const statsLabel = document.getElementById('stats-label');
-        statsLabel.innerText = '(lbs)';
-        needsRecalc = true;
-    });
+                    const statsLabel = document.getElementById("stats-label");
+                    statsLabel.innerText = "(lbs)";
+                    needsRecalc = true;
+                });
 
-    document.getElementById('metric').addEventListener('click', function () {
-        if (!isImperial) {
-            return;
-        }
+            document
+                .getElementById("metric")
+                .addEventListener("click", function () {
+                    if (!isImperial) {
+                        return;
+                    }
 
-        const statsLabel = document.getElementById('stats-label');
-        statsLabel.innerText = '(kg)';
-        needsRecalc = true;
-    });
-    
-    document.getElementById('calculate').addEventListener('click', function () {
-        const gender = document.querySelector('input[name="gender"]:checked').id;
-        const unit   = document.querySelector('input[name="unit"]:checked').id;
-        const weight = (parseFloat(document.getElementById('weight').value) / (unit === 'imperial'? 2.205 : 1)).toFixed();
-        const height = (parseFloat(document.getElementById('height').value) * (unit === 'imperial'? 2.54 : 1)).toFixed();
-        
-        const bodyFatMultiplier = 'male' === gender ? .88 : .8;
-        const levelMultiplier   = [0.6, 0.7, 0.8, 0.9, 1, 1.1];
-        let   totals            = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+                    const statsLabel = document.getElementById("stats-label");
+                    statsLabel.innerText = "(kg)";
+                    needsRecalc = true;
+                });
 
-        for (let i = 0; i < 6; i++) {
-            let temp = ((611.19 * (weight * bodyFatMultiplier / height)) - 10.43) * levelMultiplier[i];
-            temp *= unit === 'imperial'? 2.205 : 1;
-            squatRow.cells[i + 1].childNodes[0].value = (temp).toFixed(2);
-            totals[i] += temp;
-        }
+            document
+                .getElementById("calculate")
+                .addEventListener("click", function () {
+                    const gender = document.querySelector(
+                        'input[name="gender"]:checked'
+                    ).id;
+                    const unit = document.querySelector(
+                        'input[name="unit"]:checked'
+                    ).id;
+                    const weight = (
+                        parseFloat(document.getElementById("weight").value) /
+                        (unit === "imperial" ? 2.205 : 1)
+                    ).toFixed();
+                    const height = (
+                        parseFloat(document.getElementById("height").value) *
+                        (unit === "imperial" ? 2.54 : 1)
+                    ).toFixed();
 
-        for (let i = 0; i < 6; i++) {
-            let temp = ((427.14 * (weight * bodyFatMultiplier / height)) - 14.75) * levelMultiplier[i];
-            temp *= unit === 'imperial'? 2.205 : 1;
-            bpRow.cells[i + 1].childNodes[0].value = (temp).toFixed(2);
-            totals[i] += temp;
-        }
+                    const bodyFatMultiplier = "male" === gender ? 0.88 : 0.8;
+                    const levelMultiplier = [0.6, 0.7, 0.8, 0.9, 1, 1.1];
+                    let totals = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
 
-        for (let i = 0; i < 6; i++) {
-            let temp = ((410.2  * (weight * bodyFatMultiplier / height)) +  102.5) * levelMultiplier[i];
-            temp *= unit === 'imperial'? 2.205 : 1;
-            deadliftRow.cells[i + 1].childNodes[0].value = (temp).toFixed(2);
-            totals[i] += temp;
-        }
+                    for (let i = 0; i < 6; i++) {
+                        let temp =
+                            (611.19 * ((weight * bodyFatMultiplier) / height) -
+                                10.43) *
+                            levelMultiplier[i];
+                        temp *= unit === "imperial" ? 2.205 : 1;
+                        squatRow.cells[i + 1].childNodes[0].value =
+                            temp.toFixed(2);
+                        totals[i] += temp;
+                    }
 
-        for (let i = 0; i < 6; i++) {
-            totalRow.cells[i + 1].childNodes[0].value = (totals[i]).toFixed(2);
-        }
-    });
-    
-    colorTableGradient('stats-table', '#F7FFF7', '#bde2fc', '#157d5a');
-    addHomeButton('main-table')
-</script>
-</body>
+                    for (let i = 0; i < 6; i++) {
+                        let temp =
+                            (427.14 * ((weight * bodyFatMultiplier) / height) -
+                                14.75) *
+                            levelMultiplier[i];
+                        temp *= unit === "imperial" ? 2.205 : 1;
+                        bpRow.cells[i + 1].childNodes[0].value =
+                            temp.toFixed(2);
+                        totals[i] += temp;
+                    }
+
+                    for (let i = 0; i < 6; i++) {
+                        let temp =
+                            (410.2 * ((weight * bodyFatMultiplier) / height) +
+                                102.5) *
+                            levelMultiplier[i];
+                        temp *= unit === "imperial" ? 2.205 : 1;
+                        deadliftRow.cells[i + 1].childNodes[0].value =
+                            temp.toFixed(2);
+                        totals[i] += temp;
+                    }
+
+                    for (let i = 0; i < 6; i++) {
+                        totalRow.cells[i + 1].childNodes[0].value =
+                            totals[i].toFixed(2);
+                    }
+                });
+
+            colorTableGradient("stats-table", "#F7FFF7", "#bde2fc", "#157d5a");
+            addHomeButton("main-table");
+        </script>
+    </body>
 </html>

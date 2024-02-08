@@ -1,652 +1,997 @@
 <!DOCTYPE html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.44">
-    <title>BBLS Planner</title>
-    <link rel="stylesheet" href="../style.css">
-    <script src="../script.js"></script>
-</head>
-<body>
-<table id="main-table">
-    <colgroup>
-        <col style="width: 50%;">
-        <col style="width: 50%;">
-    </colgroup>
-    <th colspan="2">
-        &nbsp; Beyond Bigger Leaner Stronger - Workout Planner
-    </th>
-    <tr>
-        <td>
-            Unit of Measurement:
-        </td>
-        <td>
-            <input type="radio" name="unit" id="imperial" onclick="imperialClick()" checked>
-            <label for="imperial">Imperial</label>
-            <input type="radio" name="unit" id="metric" onclick="metricClick()">
-            <label for="metric">Metric</label>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Number of workouts per week
-        </td>
-        <td>
-            <select id="days" onchange="updateDayForm(this)">
-                <option value="3">3 Days / Week</option>
-                <option value="4">4 Days / Week</option>
-                <option value="5" selected>5 Days / Week</option>
-            </select>
-        </td>
-    </tr>
-    <tr id="next-row">
-        <td colspan="2" style="text-align: center;">
-            <button id="next" onclick="next('addDays')">Next</button>
-        </td>
-    </tr>
-</table>
-<script>
-    const options = [
-        { value: ''                        , text: '--Select Exercise--'        , optGroup: '' },
-        { value: 'custom'                  , text: 'Custom Exercise'            , optGroup: 'Any' },
-        { value: 'barbell-bench-press'     , text: 'Barbell Bench Press'        , optGroup: 'Chest' },
-        { value: 'incline-bench-press'     , text: 'Incline Barbel Bench Press' , optGroup: 'Chest' },
-        { value: 'close-grip-bench-press'  , text: 'Close Grip Bench Press'     , optGroup: 'Chest' },
-        { value: 'reverse-grip-bench-press', text: 'Reverse Grip Bench Press'   , optGroup: 'Chest' },
-        { value: 'dumbbell-bench-press'    , text: 'Dumbbell Bench Press'       , optGroup: 'Chest' },
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=0.44"
+        />
+        <title>BBLS Planner</title>
+        <link rel="stylesheet" href="../style.css" />
+        <script src="../script.js"></script>
+    </head>
+    <body>
+        <div class="fixed-bg"></div>
+        <table id="main-table">
+            <colgroup>
+                <col style="width: 50%" />
+                <col style="width: 50%" />
+            </colgroup>
+            <th colspan="2">
+                &nbsp; Beyond Bigger Leaner Stronger - Workout Planner
+            </th>
+            <tr>
+                <td>Unit of Measurement:</td>
+                <td>
+                    <input
+                        type="radio"
+                        name="unit"
+                        id="imperial"
+                        onclick="imperialClick()"
+                        checked
+                    />
+                    <label for="imperial">Imperial</label>
+                    <input
+                        type="radio"
+                        name="unit"
+                        id="metric"
+                        onclick="metricClick()"
+                    />
+                    <label for="metric">Metric</label>
+                </td>
+            </tr>
+            <tr>
+                <td>Number of workouts per week</td>
+                <td>
+                    <select id="days" onchange="updateDayForm(this)">
+                        <option value="3">3 Days / Week</option>
+                        <option value="4">4 Days / Week</option>
+                        <option value="5" selected>5 Days / Week</option>
+                    </select>
+                </td>
+            </tr>
+            <tr id="next-row">
+                <td colspan="2" style="text-align: center">
+                    <button id="next" onclick="next('addDays')">Next</button>
+                </td>
+            </tr>
+        </table>
+        <script>
+            const options = [
+                { value: "", text: "--Select Exercise--", optGroup: "" },
+                { value: "custom", text: "Custom Exercise", optGroup: "Any" },
+                {
+                    value: "barbell-bench-press",
+                    text: "Barbell Bench Press",
+                    optGroup: "Chest",
+                },
+                {
+                    value: "incline-bench-press",
+                    text: "Incline Barbel Bench Press",
+                    optGroup: "Chest",
+                },
+                {
+                    value: "close-grip-bench-press",
+                    text: "Close Grip Bench Press",
+                    optGroup: "Chest",
+                },
+                {
+                    value: "reverse-grip-bench-press",
+                    text: "Reverse Grip Bench Press",
+                    optGroup: "Chest",
+                },
+                {
+                    value: "dumbbell-bench-press",
+                    text: "Dumbbell Bench Press",
+                    optGroup: "Chest",
+                },
 
-        { value: 'barbell-deadlift'        , text: 'Barbell Deadlift'           , optGroup: 'Back' },
-        { value: 'trap-bar-deadlift'       , text: 'Trap Bar Deadlift'          , optGroup: 'Back' },
-        { value: 'sumo-deadlift'           , text: 'Sumo Deadlift'              , optGroup: 'Back' },
-        { value: 'romanian-deadlift'       , text: 'Romanian Deadlift'          , optGroup: 'Back' },
-        { value: 'barbell-row'             , text: 'Barbell Row'                , optGroup: 'Back' },
-        { value: 'tbar-row'                , text: 'T-Bar Row'                  , optGroup: 'Back' },
-        { value: 'pullup'                  , text: 'Pull Up'                    , optGroup: 'Back' },
-        { value: 'chinup'                  , text: 'chinup'                     , optGroup: 'Back' },
-        { value: 'one-arm-dumbbell-row'    , text: 'One Arm Dumbbell Row'       , optGroup: 'Back' },
-        { value: 'seated-cable-row'        , text: 'Seated Cable Row'           , optGroup: 'Back' },
-        
-        { value: 'standing-military-press' , text: 'Standing Military Press'    , optGroup: 'Shoulders' },
-        { value: 'seated-military-press'   , text: 'Seated Military Press'      , optGroup: 'Shoulders' },
-        { value: 'push-press'              , text: 'Push Press'                 , optGroup: 'Shoulders' },
-        { value: 'dumbbell-side-raise'     , text: 'Dumbbell Side Raise'        , optGroup: 'Shoulders' },
-        { value: 'dumbbell-rear-delt-fly'  , text: 'Dumbbell Read Delt Fly'     , optGroup: 'Shoulders' },
-        { value: 'machine-rear-delt-fly'   , text: 'Machine Read Delt Fly'      , optGroup: 'Shoulders' },
-        
-        
-        { value: 'barbell-squat'           , text: 'Barbell Back Squat'         , optGroup: 'Legs' },
-        { value: 'barbell-front-squat'     , text: 'Barbell Front Squat'        , optGroup: 'Legs' },
-        { value: 'barbell-good-morning'    , text: 'Barbell Good Morning'       , optGroup: 'Legs' },
-        { value: 'dumbbell-lunge'          , text: 'Walking Dumbbell Lunge'     , optGroup: 'Legs' },
-        { value: 'bulgarian-split-squat'   , text: 'Bulgarian Split Squat'      , optGroup: 'Legs' },
-        { value: 'leg-curl'                , text: 'Leg Curl (Lying or Seated)' , optGroup: 'Legs' },
-        
-        { value: 'leg-press-calf-raise'    , text: 'Leg Press Calf Raise'       , optGroup: 'Calfs' },
-        { value: 'seated-calf-raise'       , text: 'Seated Calf Raise'          , optGroup: 'Calfs' },
-        { value: 'standing-calf-raise'     , text: 'Standing Calf Raise'        , optGroup: 'Calfs' },
-        
-        { value: 'dip'                     , text: 'Dip'                        , optGroup: 'Triceps' },
-        { value: 'tricep-pressdown'        , text: 'Triceps Press Down'         , optGroup: 'Triceps' },
-        { value: 'skullcrusher'            , text: 'EZ Bar Skullcrusher'        , optGroup: 'Triceps' },
-        { value: 'tricep-overhead-press'   , text: 'Triceps Overhead Press'     , optGroup: 'Triceps' },
+                {
+                    value: "barbell-deadlift",
+                    text: "Barbell Deadlift",
+                    optGroup: "Back",
+                },
+                {
+                    value: "trap-bar-deadlift",
+                    text: "Trap Bar Deadlift",
+                    optGroup: "Back",
+                },
+                {
+                    value: "sumo-deadlift",
+                    text: "Sumo Deadlift",
+                    optGroup: "Back",
+                },
+                {
+                    value: "romanian-deadlift",
+                    text: "Romanian Deadlift",
+                    optGroup: "Back",
+                },
+                { value: "barbell-row", text: "Barbell Row", optGroup: "Back" },
+                { value: "tbar-row", text: "T-Bar Row", optGroup: "Back" },
+                { value: "pullup", text: "Pull Up", optGroup: "Back" },
+                { value: "chinup", text: "chinup", optGroup: "Back" },
+                {
+                    value: "one-arm-dumbbell-row",
+                    text: "One Arm Dumbbell Row",
+                    optGroup: "Back",
+                },
+                {
+                    value: "seated-cable-row",
+                    text: "Seated Cable Row",
+                    optGroup: "Back",
+                },
 
-        { value: 'dumbbell-curl'           , text: 'Alternating Dumbbell Curl'  , optGroup: 'Biceps' },
-        { value: 'hammer-curl'             , text: 'Hammer Curl'                , optGroup: 'Biceps' },
-        { value: 'cable-curl'              , text: 'Cable Curl'                 , optGroup: 'Biceps' },
-        { value: 'preacher-curl'           , text: 'EZ Bar Preacher Curl'       , optGroup: 'Biceps' },
+                {
+                    value: "standing-military-press",
+                    text: "Standing Military Press",
+                    optGroup: "Shoulders",
+                },
+                {
+                    value: "seated-military-press",
+                    text: "Seated Military Press",
+                    optGroup: "Shoulders",
+                },
+                {
+                    value: "push-press",
+                    text: "Push Press",
+                    optGroup: "Shoulders",
+                },
+                {
+                    value: "dumbbell-side-raise",
+                    text: "Dumbbell Side Raise",
+                    optGroup: "Shoulders",
+                },
+                {
+                    value: "dumbbell-rear-delt-fly",
+                    text: "Dumbbell Read Delt Fly",
+                    optGroup: "Shoulders",
+                },
+                {
+                    value: "machine-rear-delt-fly",
+                    text: "Machine Read Delt Fly",
+                    optGroup: "Shoulders",
+                },
 
-    ];
+                {
+                    value: "barbell-squat",
+                    text: "Barbell Back Squat",
+                    optGroup: "Legs",
+                },
+                {
+                    value: "barbell-front-squat",
+                    text: "Barbell Front Squat",
+                    optGroup: "Legs",
+                },
+                {
+                    value: "barbell-good-morning",
+                    text: "Barbell Good Morning",
+                    optGroup: "Legs",
+                },
+                {
+                    value: "dumbbell-lunge",
+                    text: "Walking Dumbbell Lunge",
+                    optGroup: "Legs",
+                },
+                {
+                    value: "bulgarian-split-squat",
+                    text: "Bulgarian Split Squat",
+                    optGroup: "Legs",
+                },
+                {
+                    value: "leg-curl",
+                    text: "Leg Curl (Lying or Seated)",
+                    optGroup: "Legs",
+                },
 
-    const mainTable         = document.getElementById('main-table');
-    const exerciseList      = []
-    let nextStep            = 'addDays';
-    let days                = 0;
-    let unit                = ''
-    const exerciseCountDays = [];
+                {
+                    value: "leg-press-calf-raise",
+                    text: "Leg Press Calf Raise",
+                    optGroup: "Calfs",
+                },
+                {
+                    value: "seated-calf-raise",
+                    text: "Seated Calf Raise",
+                    optGroup: "Calfs",
+                },
+                {
+                    value: "standing-calf-raise",
+                    text: "Standing Calf Raise",
+                    optGroup: "Calfs",
+                },
 
-    function resetWorkout() {
-        if (nextStep !== 'DONE' && nextStep !== 'createWorkout') {
-            return;
-        }
-        nextStep = 'createWorkout'
-        try {
-            document.getElementById('month1Row').remove();
-            document.getElementById('month2Row').remove();
-            document.getElementById('month3Row').remove();
-            document.getElementById('month4Row').remove();
-        } catch {
-            // ignore
-        }
-        next();
-    }
+                { value: "dip", text: "Dip", optGroup: "Triceps" },
+                {
+                    value: "tricep-pressdown",
+                    text: "Triceps Press Down",
+                    optGroup: "Triceps",
+                },
+                {
+                    value: "skullcrusher",
+                    text: "EZ Bar Skullcrusher",
+                    optGroup: "Triceps",
+                },
+                {
+                    value: "tricep-overhead-press",
+                    text: "Triceps Overhead Press",
+                    optGroup: "Triceps",
+                },
 
-    function imperialClick() {
-        if (isImperial) {
-            return;
-        }
-        for (let i = 0; i < days; i++) {
-            for (let j = 0; j < exerciseCountDays[i]; j++) {
-                const input = document.getElementById(`day${i}exercise${j}weight`);
-                const label = document.getElementById(`day${i}exercise${j}label`);
-                if (input.value > 0) {
-                    input.value = (input.value * 2.205).toFixed();
+                {
+                    value: "dumbbell-curl",
+                    text: "Alternating Dumbbell Curl",
+                    optGroup: "Biceps",
+                },
+                {
+                    value: "hammer-curl",
+                    text: "Hammer Curl",
+                    optGroup: "Biceps",
+                },
+                { value: "cable-curl", text: "Cable Curl", optGroup: "Biceps" },
+                {
+                    value: "preacher-curl",
+                    text: "EZ Bar Preacher Curl",
+                    optGroup: "Biceps",
+                },
+            ];
+
+            const mainTable = document.getElementById("main-table");
+            const exerciseList = [];
+            let nextStep = "addDays";
+            let days = 0;
+            let unit = "";
+            const exerciseCountDays = [];
+
+            function resetWorkout() {
+                if (nextStep !== "DONE" && nextStep !== "createWorkout") {
+                    return;
                 }
-                label.innerText = ' lbs'
-            }
-        }
-        resetWorkout();
-    }
-
-    function metricClick() {
-        if (!isImperial) {
-            return;
-        }
-        for (let i = 0; i < days; i++) {
-            for (let j = 0; j < exerciseCountDays[i]; j++) {
-                const input = document.getElementById(`day${i}exercise${j}weight`);
-                const label = document.getElementById(`day${i}exercise${j}label`);
-                if (input.value > 0) {
-                    input.value = (input.value / 2.205).toFixed();
+                nextStep = "createWorkout";
+                try {
+                    document.getElementById("month1Row").remove();
+                    document.getElementById("month2Row").remove();
+                    document.getElementById("month3Row").remove();
+                    document.getElementById("month4Row").remove();
+                } catch {
+                    // ignore
                 }
-                label.innerText = ' kg'
+                next();
             }
-        }
-        if (nextStep === 'DONE') {
-            nextStep = 'createWorkout'
-            document.getElementById('month1Row').remove();
-            document.getElementById('month2Row').remove();
-            document.getElementById('month3Row').remove();
-            document.getElementById('month4Row').remove();
-            next();
-        }
-    }
 
-    function moveNext() {
-        const next    = document.getElementById('next');
-        const nextRow = document.getElementById('next-row');
-        
-        if (nextStep === 'DONE') {
-            next.innerHTML = 'Recalculate Values';
-        } else {
-            // nextRow.remove();
-            mainTable.appendChild(nextRow);
-        }
-        mainTable.appendChild(document.getElementById('home'));
-        colorTableGradient('main-table', '#292F36', '#bde2fc', '#4a5dd9');
-    }
-
-    function updateDayForm(el) {
-        const oldDays = days;
-        days = parseInt(el.value);
-        if (days < oldDays) {
-            for (let i = oldDays - 1; i >= days; i--) {
-                document.getElementById('days' + i).remove();
-                document.getElementById('exercises' + i).parentNode.parentNode.remove();
-            }
-        } else {
-            addDays(oldDays)
-            addExercises(oldDays, 0, false);
-        }
-        resetWorkout();
-    }
-
-    function updateExerciseForm(el) {
-        if (nextStep !== 'addExercises') {
-            const day      = parseInt(el.id.replace('exerciseCountDay', ''));
-            const value    = parseInt(el.value);
-            const dayTable = document.getElementById('exercises' + day);
-            if (value < dayTable.rows.length) {
-                for (let i = dayTable.rows.length - 1; i >= value; i--) {
-                    dayTable.rows[i].remove();
+            function imperialClick() {
+                if (isImperial) {
+                    return;
                 }
-            } else {
-                const n = value - dayTable.rows.length;
-                for (let i = 0; i < n; i++) {
-                    addExercises(day, exerciseCountDays[day], true);
+                for (let i = 0; i < days; i++) {
+                    for (let j = 0; j < exerciseCountDays[i]; j++) {
+                        const input = document.getElementById(
+                            `day${i}exercise${j}weight`
+                        );
+                        const label = document.getElementById(
+                            `day${i}exercise${j}label`
+                        );
+                        if (input.value > 0) {
+                            input.value = (input.value * 2.205).toFixed();
+                        }
+                        label.innerText = " lbs";
+                    }
+                }
+                resetWorkout();
+            }
+
+            function metricClick() {
+                if (!isImperial) {
+                    return;
+                }
+                for (let i = 0; i < days; i++) {
+                    for (let j = 0; j < exerciseCountDays[i]; j++) {
+                        const input = document.getElementById(
+                            `day${i}exercise${j}weight`
+                        );
+                        const label = document.getElementById(
+                            `day${i}exercise${j}label`
+                        );
+                        if (input.value > 0) {
+                            input.value = (input.value / 2.205).toFixed();
+                        }
+                        label.innerText = " kg";
+                    }
+                }
+                if (nextStep === "DONE") {
+                    nextStep = "createWorkout";
+                    document.getElementById("month1Row").remove();
+                    document.getElementById("month2Row").remove();
+                    document.getElementById("month3Row").remove();
+                    document.getElementById("month4Row").remove();
+                    next();
                 }
             }
-            resetWorkout();
-        }
-    }
 
-    function addDays(iStart) {
-        days      = parseInt(document.getElementById('days').value);
-        const options = [
-            { value: 3, text: '3' },
-            { value: 4, text: '4' },
-            { value: 5, text: '5' },
-        ];
+            function moveNext() {
+                const next = document.getElementById("next");
+                const nextRow = document.getElementById("next-row");
 
-        for (let i = iStart; i < days; i++) {
-            const newRow = mainTable.insertRow(3 + i);
-            newRow.id = 'days' + i;
-            const col1 = newRow.insertCell(0);
-            col1.innerText = 'Number of exercises on Day ' + (i + 1);
-            const col2 = newRow.insertCell(1);
-            const input = document.createElement('select');
-            input.id = 'exerciseCountDay' + i;
-            options.forEach(({ value, text }) => {
-                const option = new Option(text, value);
-                option.selected = value === 4;
-                input.appendChild(option);
-            });
-            input.addEventListener('change', function(event) {
-                updateExerciseForm(event.target);
-            });
-            col2.appendChild(input);
-        }
-        moveNext();
-        nextStep = 'addExercises';
-    }
-
-    function backToList(el) {
-        const inputName = el.id.replace('button', '');
-        document.getElementById(inputName).remove();
-
-        const input = document.createElement('select');
-        input.id = inputName;
-
-        let currentOptGroup;
-        options.forEach(({ value, text, optGroup }) => {
-            if (!currentOptGroup || currentOptGroup.label !== optGroup) {
-                currentOptGroup = document.createElement('optgroup');
-                currentOptGroup.label = optGroup;
-                input.appendChild(currentOptGroup);
+                if (nextStep === "DONE") {
+                    next.innerHTML = "Recalculate Values";
+                } else {
+                    // nextRow.remove();
+                    mainTable.appendChild(nextRow);
+                }
+                mainTable.appendChild(document.getElementById("home"));
+                colorTableGradient(
+                    "main-table",
+                    "#292F36",
+                    "#bde2fc",
+                    "#4a5dd9"
+                );
             }
-            const option = new Option(text, value);
-            currentOptGroup.appendChild(option);
-        });
 
-        input.style.marginLeft  = '10px';
-        input.addEventListener('change', function(event) {
-            changeToCustom(event.target);
-        });
-        el.parentNode.insertBefore(input, el);
-        el.remove();
-    }
-
-    function changeToCustom(el) {
-        if (el.value === 'custom') {
-            const parent = el.parentNode;
-            const input  = Object.assign(document.createElement('input'), {
-                name : el.name,
-                id   : el.id,
-                style: 'margin-left: 10px;',
-                placeholder: 'Enter custom Exercise'
-            });
-            parent.replaceChild(input, el);
-            
-            const button = Object.assign(document.createElement('button'), {
-                name : 'list',
-                id   : input.id + 'button',
-                style: 'margin-left: 10px; margin-right: 8px;',
-                innerText: 'list',
-            });
-            button.addEventListener('click', function (event) {
-                backToList(event.target);
-            });
-            parent.insertBefore(button, input.nextSibling);
-        }
-    }
-
-    function updateExercisesCount() {
-        exerciseCountDays.length = 0;
-        for (let i = 0; i < days; i++) {
-            exerciseCountDays.push(
-                parseInt(document.getElementById('exerciseCountDay' + i).value)
-            );
-        }
-    }
-
-    function addExercises(iStart, jStart, updateOnly) {
-        unit = document.getElementById('imperial').checked? ' lbs' : ' kg';
-        updateExercisesCount();
-
-        for (let i = iStart; i < (updateOnly? iStart + 1 : days); i++) {
-            let table;
-            if (document.getElementById('exercises' + i)) {
-                table = document.getElementById('exercises' + i);
-            } else {
-                table          = document.createElement('table');
-                table.id       = 'exercises' + i;
-                table.style    = 'max-width: none; width: 890px';
-                const head     = table.insertRow();
-                head.outerHTML = `&nbsp; Day ${i + 1}:`
+            function updateDayForm(el) {
+                const oldDays = days;
+                days = parseInt(el.value);
+                if (days < oldDays) {
+                    for (let i = oldDays - 1; i >= days; i--) {
+                        document.getElementById("days" + i).remove();
+                        document
+                            .getElementById("exercises" + i)
+                            .parentNode.parentNode.remove();
+                    }
+                } else {
+                    addDays(oldDays);
+                    addExercises(oldDays, 0, false);
+                }
+                resetWorkout();
             }
-            for (let j = jStart; j < exerciseCountDays[i]; j++) {
-                const newRow  = table.insertRow();
-                const col     = newRow.insertCell();
-                col.style     = 'font-size: 0.98em;'
-                col.innerText = `Day ${i + 1} Exercise ${j + 1}:`;
 
-                const input  = document.createElement('select');
-                input.id     = 'day' + i + 'exercise' + j;
+            function updateExerciseForm(el) {
+                if (nextStep !== "addExercises") {
+                    const day = parseInt(el.id.replace("exerciseCountDay", ""));
+                    const value = parseInt(el.value);
+                    const dayTable = document.getElementById("exercises" + day);
+                    if (value < dayTable.rows.length) {
+                        for (
+                            let i = dayTable.rows.length - 1;
+                            i >= value;
+                            i--
+                        ) {
+                            dayTable.rows[i].remove();
+                        }
+                    } else {
+                        const n = value - dayTable.rows.length;
+                        for (let i = 0; i < n; i++) {
+                            addExercises(day, exerciseCountDays[day], true);
+                        }
+                    }
+                    resetWorkout();
+                }
+            }
+
+            function addDays(iStart) {
+                days = parseInt(document.getElementById("days").value);
+                const options = [
+                    { value: 3, text: "3" },
+                    { value: 4, text: "4" },
+                    { value: 5, text: "5" },
+                ];
+
+                for (let i = iStart; i < days; i++) {
+                    const newRow = mainTable.insertRow(3 + i);
+                    newRow.id = "days" + i;
+                    const col1 = newRow.insertCell(0);
+                    col1.innerText = "Number of exercises on Day " + (i + 1);
+                    const col2 = newRow.insertCell(1);
+                    const input = document.createElement("select");
+                    input.id = "exerciseCountDay" + i;
+                    options.forEach(({ value, text }) => {
+                        const option = new Option(text, value);
+                        option.selected = value === 4;
+                        input.appendChild(option);
+                    });
+                    input.addEventListener("change", function (event) {
+                        updateExerciseForm(event.target);
+                    });
+                    col2.appendChild(input);
+                }
+                moveNext();
+                nextStep = "addExercises";
+            }
+
+            function backToList(el) {
+                const inputName = el.id.replace("button", "");
+                document.getElementById(inputName).remove();
+
+                const input = document.createElement("select");
+                input.id = inputName;
 
                 let currentOptGroup;
                 options.forEach(({ value, text, optGroup }) => {
-                    if (!currentOptGroup || currentOptGroup.label !== optGroup) {
-                        currentOptGroup = document.createElement('optgroup');
+                    if (
+                        !currentOptGroup ||
+                        currentOptGroup.label !== optGroup
+                    ) {
+                        currentOptGroup = document.createElement("optgroup");
                         currentOptGroup.label = optGroup;
                         input.appendChild(currentOptGroup);
                     }
                     const option = new Option(text, value);
                     currentOptGroup.appendChild(option);
                 });
-                input.style.marginLeft = '10px';
-                input.style.maxHeight  = '25px';
-                input.addEventListener('change', function(event) {
+
+                input.style.marginLeft = "10px";
+                input.addEventListener("change", function (event) {
                     changeToCustom(event.target);
                 });
-                col.appendChild(input);
-
-                const primRadio = Object.assign(document.createElement('input'), {
-                    type     : 'radio',
-                    name     : 'day' + i + 'exercise' + j + 'radio',
-                    id       : 'day' + i + 'exercise' + j + 'primary',
-                    checked  : j < 2? true : false,
-                });
-                const primLabel = Object.assign(document.createElement('label'), {
-                    htmlFor: 'day' + i + 'exercise' + j + 'radio',
-                    innerText: 'Primary'
-                });
-                const secRadio = Object.assign(document.createElement('input'), {
-                    type     : 'radio',
-                    name     : 'day' + i + 'exercise' + j + 'radio',
-                    id       : 'day' + i + 'exercise' + j + 'secondary',
-                    checked  : j > 1? true : false,
-                });
-                const secLabel = Object.assign(document.createElement('label'), {
-                    htmlFor: 'day' + i + 'exercise' + j + 'radio',
-                    innerText: 'Secondary'
-                });
-                const weight = Object.assign(document.createElement('input'), {
-                    name       : 'day' + i + 'exercise' + j + 'weight',
-                    id         : 'day' + i + 'exercise' + j + 'weight',
-                    style      : 'margin-left: 20px;',
-                    placeholder: '1RM or Starting Weight',
-                    // value    : 250, // remove this
-                });
-                const weightLabel = Object.assign(document.createElement('label'), {
-                    htmlFor  : 'day' + i + 'exercise' + j + 'weight',
-                    id       : 'day' + i + 'exercise' + j + 'label',
-                    innerText: unit
-                });
-
-                col.appendChild(primRadio);
-                col.appendChild(primLabel);
-                col.appendChild(secRadio);
-                col.appendChild(secLabel);
-                col.appendChild(weight);
-                col.appendChild(weightLabel);
+                el.parentNode.insertBefore(input, el);
+                el.remove();
             }
-            if (updateOnly) {
-                colorTableGradient('exercises' + i, '#F7FFF7', '#bde2fc', '#157d5a');
-                continue;
+
+            function changeToCustom(el) {
+                if (el.value === "custom") {
+                    const parent = el.parentNode;
+                    const input = Object.assign(
+                        document.createElement("input"),
+                        {
+                            name: el.name,
+                            id: el.id,
+                            style: "margin-left: 10px;",
+                            placeholder: "Enter custom Exercise",
+                        }
+                    );
+                    parent.replaceChild(input, el);
+
+                    const button = Object.assign(
+                        document.createElement("button"),
+                        {
+                            name: "list",
+                            id: input.id + "button",
+                            style: "margin-left: 10px; margin-right: 8px;",
+                            innerText: "list",
+                        }
+                    );
+                    button.addEventListener("click", function (event) {
+                        backToList(event.target);
+                    });
+                    parent.insertBefore(button, input.nextSibling);
+                }
             }
-            const newRow  = mainTable.insertRow();
-            const newCell = newRow.insertCell();
-            newCell.colSpan = 2;
-            newCell.appendChild(table);
-            colorTableGradient('exercises' + i, '#F7FFF7', '#bde2fc', '#157d5a');
-        }
-        moveNext();
-        nextStep = 'createWorkout';
-    }
-    
-    function getExercises() {
-        updateExercisesCount();
-        exerciseList.length = 0;
-        for (let i = 0; i < days; i++) {
-            const exercises = [];
-            for (let j = 0; j < exerciseCountDays[i]; j++) {
-                try {
-                    const name = document.getElementById('day' + i + 'exercise' + j).value;
-                    let radioId = document.querySelector(`input[name=day${i}exercise${j}radio]:checked`).id;
-                    const isPrimary = radioId.includes('primary');
-                    const weight = parseInt(document.querySelector(`input[name=day${i}exercise${j}weight]`).value);
-                    if (name === '' || radioId === null || isNaN(weight)) {
-                        throw new Error();
+
+            function updateExercisesCount() {
+                exerciseCountDays.length = 0;
+                for (let i = 0; i < days; i++) {
+                    exerciseCountDays.push(
+                        parseInt(
+                            document.getElementById("exerciseCountDay" + i)
+                                .value
+                        )
+                    );
+                }
+            }
+
+            function addExercises(iStart, jStart, updateOnly) {
+                unit = document.getElementById("imperial").checked
+                    ? " lbs"
+                    : " kg";
+                updateExercisesCount();
+
+                for (
+                    let i = iStart;
+                    i < (updateOnly ? iStart + 1 : days);
+                    i++
+                ) {
+                    let table;
+                    if (document.getElementById("exercises" + i)) {
+                        table = document.getElementById("exercises" + i);
+                    } else {
+                        table = document.createElement("table");
+                        table.id = "exercises" + i;
+                        table.style = "max-width: none; width: 890px";
+                        const head = table.insertRow();
+                        head.outerHTML = `&nbsp; Day ${i + 1}:`;
                     }
-                    exercises.push({
-                        name: name,
-                        isPrimary: isPrimary,
-                        weight: weight
-                    })
-                } catch {
+                    for (let j = jStart; j < exerciseCountDays[i]; j++) {
+                        const newRow = table.insertRow();
+                        const col = newRow.insertCell();
+                        col.style = "font-size: 0.98em;";
+                        col.innerText = `Day ${i + 1} Exercise ${j + 1}:`;
+
+                        const input = document.createElement("select");
+                        input.id = "day" + i + "exercise" + j;
+
+                        let currentOptGroup;
+                        options.forEach(({ value, text, optGroup }) => {
+                            if (
+                                !currentOptGroup ||
+                                currentOptGroup.label !== optGroup
+                            ) {
+                                currentOptGroup =
+                                    document.createElement("optgroup");
+                                currentOptGroup.label = optGroup;
+                                input.appendChild(currentOptGroup);
+                            }
+                            const option = new Option(text, value);
+                            currentOptGroup.appendChild(option);
+                        });
+                        input.style.marginLeft = "10px";
+                        input.style.maxHeight = "25px";
+                        input.addEventListener("change", function (event) {
+                            changeToCustom(event.target);
+                        });
+                        col.appendChild(input);
+
+                        const primRadio = Object.assign(
+                            document.createElement("input"),
+                            {
+                                type: "radio",
+                                name: "day" + i + "exercise" + j + "radio",
+                                id: "day" + i + "exercise" + j + "primary",
+                                checked: j < 2 ? true : false,
+                            }
+                        );
+                        const primLabel = Object.assign(
+                            document.createElement("label"),
+                            {
+                                htmlFor: "day" + i + "exercise" + j + "radio",
+                                innerText: "Primary",
+                            }
+                        );
+                        const secRadio = Object.assign(
+                            document.createElement("input"),
+                            {
+                                type: "radio",
+                                name: "day" + i + "exercise" + j + "radio",
+                                id: "day" + i + "exercise" + j + "secondary",
+                                checked: j > 1 ? true : false,
+                            }
+                        );
+                        const secLabel = Object.assign(
+                            document.createElement("label"),
+                            {
+                                htmlFor: "day" + i + "exercise" + j + "radio",
+                                innerText: "Secondary",
+                            }
+                        );
+                        const weight = Object.assign(
+                            document.createElement("input"),
+                            {
+                                name: "day" + i + "exercise" + j + "weight",
+                                id: "day" + i + "exercise" + j + "weight",
+                                style: "margin-left: 20px;",
+                                placeholder: "1RM or Starting Weight",
+                                // value    : 250, // remove this
+                            }
+                        );
+                        const weightLabel = Object.assign(
+                            document.createElement("label"),
+                            {
+                                htmlFor: "day" + i + "exercise" + j + "weight",
+                                id: "day" + i + "exercise" + j + "label",
+                                innerText: unit,
+                            }
+                        );
+
+                        col.appendChild(primRadio);
+                        col.appendChild(primLabel);
+                        col.appendChild(secRadio);
+                        col.appendChild(secLabel);
+                        col.appendChild(weight);
+                        col.appendChild(weightLabel);
+                    }
+                    if (updateOnly) {
+                        colorTableGradient(
+                            "exercises" + i,
+                            "#F7FFF7",
+                            "#bde2fc",
+                            "#157d5a"
+                        );
+                        continue;
+                    }
                     const newRow = mainTable.insertRow();
-                    newRow.id    = 'error'
-                    newRow.style.background = '#ff0000';
-                    const cell   = newRow.insertCell();
-                    cell.colSpan = 2;
-                    cell.innerHTML = '&nbsp; &nbsp; &nbsp; Not All Fields Set';
-                    return;
+                    const newCell = newRow.insertCell();
+                    newCell.colSpan = 2;
+                    newCell.appendChild(table);
+                    colorTableGradient(
+                        "exercises" + i,
+                        "#F7FFF7",
+                        "#bde2fc",
+                        "#157d5a"
+                    );
                 }
+                moveNext();
+                nextStep = "createWorkout";
             }
-            exerciseList.push(exercises);
-        }
-        return true;
-    }
 
-    function roundToNearestFive (weight, percentage) {
-        return (Math.round((weight * percentage) / 5) * 5).toFixed();
-    }
-
-    function createWeightColText(isPrimary, multiplier, weight, primReps, secReps, weekNum, monthNum) {
-        if (monthNum === 4) {
-            if (weekNum === 3) {
-                primReps   = 'AMRAP';
-            } else if (weekNum === 4) {
-                primReps   = 10;
-                secReps    = 7;
-                multiplier = 1;
-                weight    /= 2;
-            }
-        }
-        
-        if (isPrimary) {
-            if (weekNum !== 4) {
-                return `4 sets X ${primReps} ${primReps === 'AMRAP'? '' : 'reps'} @ ${roundToNearestFive(weight, multiplier)}`;
-            } else {
-                return `2 sets X ${primReps / 2} reps @ ${roundToNearestFive(weight, multiplier)}`;
-            }
-        } else {
-            if (weekNum !== 4) {
-                return `4 sets X ${secReps + weekNum - 1} reps @ ${roundToNearestFive(weight, 1)}`;
-            } else {
-                return `2 sets X ${Math.floor((secReps + weekNum - 1) / 2)} reps @ ${roundToNearestFive(weight, 1)}`;
-            }
-        }
-    }
-
-    function createTrainingWeek(table, multiplier, primReps, secReps, weekNum) {
-        unit           = document.getElementById('imperial').checked? 'lbs' : 'kg';
-        const monthNum = parseInt(table.id.match(/[0-9]/));
-        
-        let message    = ''
-        if (weekNum === 4) {
-            message = ' [REST WEEK]'
-        } else if (monthNum === 4 && weekNum === 3) {
-            message = ' [STRENGTH WEEK]'
-        }
-
-        const weekTable              = document.createElement('table');
-        weekTable.id                 = table.id + 'Week' + weekNum;
-        weekTable.style.marginTop    = '0px';
-        weekTable.style.marginBottom = '0px';
-        weekTable.style              = 'max-width: none;';
-        const head                   = weekTable.insertRow();
-        head.outerHTML               = `&nbsp; Month ${monthNum} -> Week ${weekNum} ${message}`;
-
-        for (let i = 0; i < days; i++) {
-            const dayTable = document.createElement('table');
-            dayTable.id = `${weekTable.id}Day${i}`;
-            dayTable.style.marginTop = '0px';
-            dayTable.style.marginBottom = '0px';
-            dayTable.style              = 'max-width: none;';
-            dayTable.style.borderCollapse = 'separate';
-            const title     = dayTable.insertRow();
-            title.colSpan   = 2;
-            title.outerHTML = `&nbsp; Month ${monthNum} -> Week ${weekNum} -> Day ${i + 1}`;
-            
-            for (let j = 0; j < exerciseCountDays[i]; j++) {
-                const exercise              = exerciseList[i][j];
-                const exerciseRow           = dayTable.insertRow();
-                exerciseRow.style.borderCollapse = 'separate';
-                const exerciseNameCol       = exerciseRow.insertCell();
-                const exerciseWeightCol     = exerciseRow.insertCell();
-                
-                exerciseNameCol.style.width = '50%';
-                exerciseNameCol.innerText = exercise.name;
-                
-                if (exercise.isPrimary) {
-                    exerciseWeightCol.innerText = createWeightColText(true, multiplier, exercise.weight, primReps, secReps, weekNum, monthNum);
-                } else {
-                    exerciseWeightCol.innerText = createWeightColText(false, multiplier, exercise.weight, primReps, secReps, weekNum, monthNum);
-                    if (weekNum === 4) {
-                        exercise.weight += 10;
-                    }
-                }
-                exerciseWeightCol.innerText += ` ${unit}`;
-            }
-            const weekRow    = weekTable.insertRow();
-            const weekCell   = weekRow.insertCell();
-            weekCell.colSpan = 2;
-            weekCell.appendChild(dayTable);
-        }
-
-        const newRow = table.insertRow();
-        const cell   = newRow.insertCell();
-        cell.colSpan = 2;
-        cell.appendChild(weekTable);
-    }
-
-    function createMonth(monthNum, initPercent, initPrimReps, secReps) {
-        const monthTable              = document.createElement('table');
-        monthTable.id                 = `Month${monthNum}`;
-        monthTable.style.marginTop    = '0px';
-        monthTable.style.marginBottom = '0px';
-        monthTable.style    = 'max-width: none; width: 890px';
-        const head     = monthTable.insertRow();
-        head.outerHTML = `&nbsp; Month ${monthNum}`;
-
-        createTrainingWeek(monthTable, initPercent       , initPrimReps    , secReps, 1);
-        createTrainingWeek(monthTable, initPercent + 0.05, initPrimReps - 2, secReps, 2);
-        createTrainingWeek(monthTable, initPercent + 0.10, initPrimReps - 4, secReps, 3);
-        createTrainingWeek(monthTable, initPercent + 0.10, initPrimReps - 4, secReps, 4);
-
-        const newRow = mainTable.insertRow();
-        newRow.id    = `month${monthNum}Row`;
-        const cell   = newRow.insertCell();
-        cell.colSpan = 2;
-        cell.appendChild(monthTable);
-    }
-
-    function oppositeColor(red, green, blue) {
-        const ratio    = 3.1;
-        const L1       = (0.299 * (red / 255)) + (0.587 * (green / 255)) + (0.114 * (blue / 255));
-        const L2       = ((L1 + 0.05) / ratio) - 0.05;
-        
-        const newRed   = (L2 / 0.10) * 255;
-        const newGreen = (L2 / 0.10) * 255;
-        const newBlue  = (L2 / 0.90) * 255;
-        newColor       = `rgb(${newRed}, ${newGreen}, ${newBlue})`;
-        return newColor;
-    }
-
-    function oppositeColorString(rgb) {
-        const [, red, green, blue] = rgb.match(/rgb\((\d{1,3}), (\d{1,3}), (\d{1,3})\)/);
-        return oppositeColor(red, green, blue);
-    }
-
-    function getBaseAndPeak(baseColor, peakColor) {
-        const baseRed   = parseInt(baseColor.slice(1,3), 16);
-        const baseGreen = parseInt(baseColor.slice(3,5), 16);
-        const baseBlue  = parseInt(baseColor.slice(5,7), 16);
-        const peakRed   = parseInt(peakColor.slice(1,3), 16);
-        const peakGreen = parseInt(peakColor.slice(3,5), 16);
-        const peakBlue  = parseInt(peakColor.slice(5,7), 16);
-
-        return [baseRed, baseGreen, baseBlue, peakRed, peakGreen, peakBlue];
-    }
-    
-    function colorWorkoutGradient() {
-        const colors  = ['#aed6f1', '#85c1e9', '#5dade2', '#3498db', '#a3e4d7', '#76d7c4', '#52be80', '#2ecc71', '#f8c471', '#f5b041', '#f39c12', '#e67e22', '#f5b7b1', '#f1948a', '#ec7063', '#e74c3c'] 
-        let baseColor = '';
-        let peakColor = '';
-
-        let exerciseCount = exerciseList.map(exercises => exercises.length).reduce((a, b) => a + b, 0);
-        let step          = 0;
-        let n             = exerciseCount;
-        let newColor      = '';
-
-        for (let i = 1; i <= 4; i++) {
-            const monthTable = document.getElementById(`Month${i}`);
-            for (let j = 1; j <= 4; j++) {
-                const weekTable = document.getElementById(`Month${i}Week${j}`);
-                baseColor       = colors[(i - 1) * 4];
-                peakColor       = colors[((i - 1) * 4) + 3];
-                let [baseRed, baseGreen, baseBlue, peakRed, peakGreen, peakBlue] = getBaseAndPeak(baseColor, peakColor);
-                for (let k = 0; k < days; k++) {
-                    const dayTable = document.getElementById(`Month${i}Week${j}Day${k}`);
-                    for (let l = 0; l < dayTable.rows.length; l++) {
-                        const newRed   = baseRed   + (step / n) * (peakRed - baseRed)    ;
-                        const newGreen = baseGreen + (step / n) * (peakGreen - baseGreen);
-                        const newBlue  = baseBlue  + (step / n) * (peakBlue - baseBlue)  ;
-                    
-                        newColor                     = `rgb(${newRed}, ${newGreen}, ${newBlue})`;
-                        dayTable.rows[l].style.color = oppositeColor(newRed, newGreen, newBlue);
-                        dayTable.rows[l].style.backgroundColor = newColor;
-                        step++;
-                        if (step >= n) {
-                            step = 0;
+            function getExercises() {
+                updateExercisesCount();
+                exerciseList.length = 0;
+                for (let i = 0; i < days; i++) {
+                    const exercises = [];
+                    for (let j = 0; j < exerciseCountDays[i]; j++) {
+                        try {
+                            const name = document.getElementById(
+                                "day" + i + "exercise" + j
+                            ).value;
+                            let radioId = document.querySelector(
+                                `input[name=day${i}exercise${j}radio]:checked`
+                            ).id;
+                            const isPrimary = radioId.includes("primary");
+                            const weight = parseInt(
+                                document.querySelector(
+                                    `input[name=day${i}exercise${j}weight]`
+                                ).value
+                            );
+                            if (
+                                name === "" ||
+                                radioId === null ||
+                                isNaN(weight)
+                            ) {
+                                throw new Error();
+                            }
+                            exercises.push({
+                                name: name,
+                                isPrimary: isPrimary,
+                                weight: weight,
+                            });
+                        } catch {
+                            const newRow = mainTable.insertRow();
+                            newRow.id = "error";
+                            newRow.style.background = "#ff0000";
+                            const cell = newRow.insertCell();
+                            cell.colSpan = 2;
+                            cell.innerHTML =
+                                "&nbsp; &nbsp; &nbsp; Not All Fields Set";
+                            return;
                         }
                     }
-                    dayTable.style.backgroundColor = newColor;
+                    exerciseList.push(exercises);
                 }
-                // weekTable.style.backgroundColor   = '#4a5dd9'
-                // monthTable.style.backgroundColor  = '#4a5dd9'
-                weekTable.style.backgroundColor  = oppositeColorString(document.getElementById(`Month${i}Week${j}Day${~~(days / 2)}`).style.backgroundColor);
-                monthTable.style.backgroundColor = oppositeColorString(document.getElementById(`Month${i}Week${j}`).style.backgroundColor);
+                return true;
             }
-        }
-    }
 
-    function createWorkout() {
-        if (document.getElementById('error')) {
-            document.getElementById('error').remove();
-        }
-        const exercises = getExercises();
-        if (exercises) {
-            createMonth(1, 0.70, 10, 10);
-            createMonth(2, 0.75, 8 , 8);
-            createMonth(3, 0.80, 6 , 8);
-            createMonth(4, 0.85, 4 , 6);
-            
-            nextStep = 'DONE';
-            moveNext();
-            colorWorkoutGradient();
-        }
-    }
+            function roundToNearestFive(weight, percentage) {
+                return (Math.round((weight * percentage) / 5) * 5).toFixed();
+            }
 
-    function next() {
-        switch(nextStep) {
-            case 'addDays':
-                addDays(0);
-                break;
-            case 'addExercises':
-                addExercises(0, 0);
-                break;
-            case 'createWorkout':
-                createWorkout();
-                break;
-            case 'DONE':
-                resetWorkout();
-                break;
-        }
-    }
-    addHomeButton('main-table');
-    document.getElementById('next').click();
-    document.getElementById('next').click();
-    <!-- document.getElementById('next').click(); -->
-</script>
-</body>
+            function createWeightColText(
+                isPrimary,
+                multiplier,
+                weight,
+                primReps,
+                secReps,
+                weekNum,
+                monthNum
+            ) {
+                if (monthNum === 4) {
+                    if (weekNum === 3) {
+                        primReps = "AMRAP";
+                    } else if (weekNum === 4) {
+                        primReps = 10;
+                        secReps = 7;
+                        multiplier = 1;
+                        weight /= 2;
+                    }
+                }
+
+                if (isPrimary) {
+                    if (weekNum !== 4) {
+                        return `4 sets X ${primReps} ${
+                            primReps === "AMRAP" ? "" : "reps"
+                        } @ ${roundToNearestFive(weight, multiplier)}`;
+                    } else {
+                        return `2 sets X ${
+                            primReps / 2
+                        } reps @ ${roundToNearestFive(weight, multiplier)}`;
+                    }
+                } else {
+                    if (weekNum !== 4) {
+                        return `4 sets X ${
+                            secReps + weekNum - 1
+                        } reps @ ${roundToNearestFive(weight, 1)}`;
+                    } else {
+                        return `2 sets X ${Math.floor(
+                            (secReps + weekNum - 1) / 2
+                        )} reps @ ${roundToNearestFive(weight, 1)}`;
+                    }
+                }
+            }
+
+            function createTrainingWeek(
+                table,
+                multiplier,
+                primReps,
+                secReps,
+                weekNum
+            ) {
+                unit = document.getElementById("imperial").checked
+                    ? "lbs"
+                    : "kg";
+                const monthNum = parseInt(table.id.match(/[0-9]/));
+
+                let message = "";
+                if (weekNum === 4) {
+                    message = " [REST WEEK]";
+                } else if (monthNum === 4 && weekNum === 3) {
+                    message = " [STRENGTH WEEK]";
+                }
+
+                const weekTable = document.createElement("table");
+                weekTable.id = table.id + "Week" + weekNum;
+                weekTable.style.marginTop = "0px";
+                weekTable.style.marginBottom = "0px";
+                weekTable.style = "max-width: none;";
+                const head = weekTable.insertRow();
+                head.outerHTML = `&nbsp; Month ${monthNum} -> Week ${weekNum} ${message}`;
+
+                for (let i = 0; i < days; i++) {
+                    const dayTable = document.createElement("table");
+                    dayTable.id = `${weekTable.id}Day${i}`;
+                    dayTable.style.marginTop = "0px";
+                    dayTable.style.marginBottom = "0px";
+                    dayTable.style = "max-width: none;";
+                    dayTable.style.borderCollapse = "separate";
+                    const title = dayTable.insertRow();
+                    title.colSpan = 2;
+                    title.outerHTML = `&nbsp; Month ${monthNum} -> Week ${weekNum} -> Day ${
+                        i + 1
+                    }`;
+
+                    for (let j = 0; j < exerciseCountDays[i]; j++) {
+                        const exercise = exerciseList[i][j];
+                        const exerciseRow = dayTable.insertRow();
+                        exerciseRow.style.borderCollapse = "separate";
+                        const exerciseNameCol = exerciseRow.insertCell();
+                        const exerciseWeightCol = exerciseRow.insertCell();
+
+                        exerciseNameCol.style.width = "50%";
+                        exerciseNameCol.innerText = exercise.name;
+
+                        if (exercise.isPrimary) {
+                            exerciseWeightCol.innerText = createWeightColText(
+                                true,
+                                multiplier,
+                                exercise.weight,
+                                primReps,
+                                secReps,
+                                weekNum,
+                                monthNum
+                            );
+                        } else {
+                            exerciseWeightCol.innerText = createWeightColText(
+                                false,
+                                multiplier,
+                                exercise.weight,
+                                primReps,
+                                secReps,
+                                weekNum,
+                                monthNum
+                            );
+                            if (weekNum === 4) {
+                                exercise.weight += 10;
+                            }
+                        }
+                        exerciseWeightCol.innerText += ` ${unit}`;
+                    }
+                    const weekRow = weekTable.insertRow();
+                    const weekCell = weekRow.insertCell();
+                    weekCell.colSpan = 2;
+                    weekCell.appendChild(dayTable);
+                }
+
+                const newRow = table.insertRow();
+                const cell = newRow.insertCell();
+                cell.colSpan = 2;
+                cell.appendChild(weekTable);
+            }
+
+            function createMonth(monthNum, initPercent, initPrimReps, secReps) {
+                const monthTable = document.createElement("table");
+                monthTable.id = `Month${monthNum}`;
+                monthTable.style.marginTop = "0px";
+                monthTable.style.marginBottom = "0px";
+                monthTable.style = "max-width: none; width: 890px";
+                const head = monthTable.insertRow();
+                head.outerHTML = `&nbsp; Month ${monthNum}`;
+
+                createTrainingWeek(
+                    monthTable,
+                    initPercent,
+                    initPrimReps,
+                    secReps,
+                    1
+                );
+                createTrainingWeek(
+                    monthTable,
+                    initPercent + 0.05,
+                    initPrimReps - 2,
+                    secReps,
+                    2
+                );
+                createTrainingWeek(
+                    monthTable,
+                    initPercent + 0.1,
+                    initPrimReps - 4,
+                    secReps,
+                    3
+                );
+                createTrainingWeek(
+                    monthTable,
+                    initPercent + 0.1,
+                    initPrimReps - 4,
+                    secReps,
+                    4
+                );
+
+                const newRow = mainTable.insertRow();
+                newRow.id = `month${monthNum}Row`;
+                const cell = newRow.insertCell();
+                cell.colSpan = 2;
+                cell.appendChild(monthTable);
+            }
+
+            function oppositeColor(red, green, blue) {
+                const ratio = 3.1;
+                const L1 =
+                    0.299 * (red / 255) +
+                    0.587 * (green / 255) +
+                    0.114 * (blue / 255);
+                const L2 = (L1 + 0.05) / ratio - 0.05;
+
+                const newRed = (L2 / 0.1) * 255;
+                const newGreen = (L2 / 0.1) * 255;
+                const newBlue = (L2 / 0.9) * 255;
+                newColor = `rgb(${newRed}, ${newGreen}, ${newBlue})`;
+                return newColor;
+            }
+
+            function oppositeColorString(rgb) {
+                const [, red, green, blue] = rgb.match(
+                    /rgb\((\d{1,3}), (\d{1,3}), (\d{1,3})\)/
+                );
+                return oppositeColor(red, green, blue);
+            }
+
+            function getBaseAndPeak(baseColor, peakColor) {
+                const baseRed = parseInt(baseColor.slice(1, 3), 16);
+                const baseGreen = parseInt(baseColor.slice(3, 5), 16);
+                const baseBlue = parseInt(baseColor.slice(5, 7), 16);
+                const peakRed = parseInt(peakColor.slice(1, 3), 16);
+                const peakGreen = parseInt(peakColor.slice(3, 5), 16);
+                const peakBlue = parseInt(peakColor.slice(5, 7), 16);
+
+                return [
+                    baseRed,
+                    baseGreen,
+                    baseBlue,
+                    peakRed,
+                    peakGreen,
+                    peakBlue,
+                ];
+            }
+
+            function colorWorkoutGradient() {
+                const colors = [
+                    "#aed6f1",
+                    "#85c1e9",
+                    "#5dade2",
+                    "#3498db",
+                    "#a3e4d7",
+                    "#76d7c4",
+                    "#52be80",
+                    "#2ecc71",
+                    "#f8c471",
+                    "#f5b041",
+                    "#f39c12",
+                    "#e67e22",
+                    "#f5b7b1",
+                    "#f1948a",
+                    "#ec7063",
+                    "#e74c3c",
+                ];
+                let baseColor = "";
+                let peakColor = "";
+
+                let exerciseCount = exerciseList
+                    .map((exercises) => exercises.length)
+                    .reduce((a, b) => a + b, 0);
+                let step = 0;
+                let n = exerciseCount;
+                let newColor = "";
+
+                for (let i = 1; i <= 4; i++) {
+                    const monthTable = document.getElementById(`Month${i}`);
+                    for (let j = 1; j <= 4; j++) {
+                        const weekTable = document.getElementById(
+                            `Month${i}Week${j}`
+                        );
+                        baseColor = colors[(i - 1) * 4];
+                        peakColor = colors[(i - 1) * 4 + 3];
+                        let [
+                            baseRed,
+                            baseGreen,
+                            baseBlue,
+                            peakRed,
+                            peakGreen,
+                            peakBlue,
+                        ] = getBaseAndPeak(baseColor, peakColor);
+                        for (let k = 0; k < days; k++) {
+                            const dayTable = document.getElementById(
+                                `Month${i}Week${j}Day${k}`
+                            );
+                            for (let l = 0; l < dayTable.rows.length; l++) {
+                                const newRed =
+                                    baseRed + (step / n) * (peakRed - baseRed);
+                                const newGreen =
+                                    baseGreen +
+                                    (step / n) * (peakGreen - baseGreen);
+                                const newBlue =
+                                    baseBlue +
+                                    (step / n) * (peakBlue - baseBlue);
+
+                                newColor = `rgb(${newRed}, ${newGreen}, ${newBlue})`;
+                                dayTable.rows[l].style.color = oppositeColor(
+                                    newRed,
+                                    newGreen,
+                                    newBlue
+                                );
+                                dayTable.rows[l].style.backgroundColor =
+                                    newColor;
+                                step++;
+                                if (step >= n) {
+                                    step = 0;
+                                }
+                            }
+                            dayTable.style.backgroundColor = newColor;
+                        }
+                        // weekTable.style.backgroundColor   = '#4a5dd9'
+                        // monthTable.style.backgroundColor  = '#4a5dd9'
+                        weekTable.style.backgroundColor = oppositeColorString(
+                            document.getElementById(
+                                `Month${i}Week${j}Day${~~(days / 2)}`
+                            ).style.backgroundColor
+                        );
+                        monthTable.style.backgroundColor = oppositeColorString(
+                            document.getElementById(`Month${i}Week${j}`).style
+                                .backgroundColor
+                        );
+                    }
+                }
+            }
+
+            function createWorkout() {
+                if (document.getElementById("error")) {
+                    document.getElementById("error").remove();
+                }
+                const exercises = getExercises();
+                if (exercises) {
+                    createMonth(1, 0.7, 10, 10);
+                    createMonth(2, 0.75, 8, 8);
+                    createMonth(3, 0.8, 6, 8);
+                    createMonth(4, 0.85, 4, 6);
+
+                    nextStep = "DONE";
+                    moveNext();
+                    colorWorkoutGradient();
+                }
+            }
+
+            function next() {
+                switch (nextStep) {
+                    case "addDays":
+                        addDays(0);
+                        break;
+                    case "addExercises":
+                        addExercises(0, 0);
+                        break;
+                    case "createWorkout":
+                        createWorkout();
+                        break;
+                    case "DONE":
+                        resetWorkout();
+                        break;
+                }
+            }
+            addHomeButton("main-table");
+            document.getElementById("next").click();
+            document.getElementById("next").click();
+            <!-- document.getElementById('next').click(); -->
+        </script>
+    </body>
 </html>

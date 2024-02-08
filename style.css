@@ -1,16 +1,29 @@
 body {
-    font: "OpenSansRegular", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+    font: "OpenSansRegular", "Helvetica Neue", "Helvetica", "Arial",
+        "sans-serif";
     font-weight: normal;
-    background: linear-gradient(#292F36, #1C1F25);
-    background-color: #1C1F25;
+    background-color: #1c1f25;
 
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100dvh;
-    width: 100dvw;
+    min-height: 100lvh;
+    width: 100lvw;
     margin: 0;
+    position: relative;
+}
+.fixed-bg {
+    background-image: url("./Images/background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    position: fixed;
+    z-index: -50;
+    height: 100lvh;
+    width: 100lvw;
+    top: 0;
+    left: 0;
 }
 
 table {
@@ -18,11 +31,11 @@ table {
     margin-bottom: 20px;
     width: 100%;
     max-width: 800px;
-    background-color: #292F36;
     text-align: left;
-    border: 2px solid #000000;
+    border: 3px solid #3f3f3f;
     font-family: monospace;
     font-weight: bold;
+    font-size: 1rem;
     border-collapse: collapse;
 }
 
@@ -30,10 +43,63 @@ td {
     padding: 10px;
     border: 1px solid #000000;
     line-height: 1.7;
+    background: none;
+}
+
+tr {
+    background: none;
 }
 
 a {
-    color: #292F36;
+    color: #000000;
+    /* color: #292F36; */
+}
+
+button {
+    color: #bde2fc;
+    background-color: #3149e4;
+    border: 2px solid #bde2fc;
+    border-radius: 7px;
+    padding: 0px 10px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block; /* Allows padding to be applied */
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.save {
+    color: #f3f3f3;
+    background-color: #129f3c;
+}
+
+.erase {
+    color: #f3f3f3;
+    background-color: #3f3f3f;
+}
+
+a.button,
+a.button:link,
+a.button:visited {
+    color: #bde2fc;
+    background-color: #3149e4;
+    border: 2px solid #bde2fc;
+    border-radius: 7px; /* Rounded corners */
+    padding: 0px 10px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block; /* Allows padding to be applied */
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+a.button:hover,
+a.button:active {
+    /* Styles for when the link is hovered over or active */
+    background-color: #bde2fc;
+    color: #3149e4;
 }
 
 @media (min-width: 800px) {
@@ -96,4 +162,10 @@ a {
 }
 #info-container:hover #info-content {
     display: block;
+}
+
+input:disabled {
+    opacity: 1;
+    background-color: #f3f3f3;
+    color: #666;
 }
